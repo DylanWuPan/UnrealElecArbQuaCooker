@@ -1,2 +1,2 @@
 # ElecArbQuaCooker
-Thomson, Muniappan, Baumal-Bardy, Pan
+Thomson, Muniappan, Baumal-Bardy, DP
