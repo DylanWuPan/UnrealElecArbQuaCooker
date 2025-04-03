@@ -12,6 +12,5 @@ public class App {
         for (ProductData productData : dataFetcher.fetchLiveData()) {
             System.out.println(productData.getProductId() + ": $" + productData.getPrice());
         }
-        ;
     }
 }
