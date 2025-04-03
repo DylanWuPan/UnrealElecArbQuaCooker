@@ -1,16 +1,15 @@
 package quacooker.api;
 
+import java.net.URI;
+import java.util.ArrayList;
+
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
 import org.json.JSONObject;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.ArrayList;
-
 public class CoinbaseWebSocketClient extends WebSocketClient {
   private final String[] product_ids;
-  private ArrayList<ProductData> liveProductData;
+  private final ArrayList<ProductData> liveProductData;
 
   public CoinbaseWebSocketClient(URI serverURI, String[] product_ids) {
     super(serverURI);
@@ -40,10 +39,17 @@ public class CoinbaseWebSocketClient extends WebSocketClient {
   public void onMessage(String message) {
     JSONObject jsonMessage = new JSONObject(message);
 
-    System.out.println(jsonMessage);
-    // double price = jsonMessage.has("price") ? jsonMessage.getDouble("price") : 0.0;
-    // String product = jsonMessage.has("product_id") ? jsonMessage.getString("product_id") : "N/A";
+    // System.out.println(jsonMessage);
+    double price = jsonMessage.has("price") ? jsonMessage.getDouble("price") : 0.0;
+    String product = jsonMessage.has("product_id") ? jsonMessage.getString("product_id") : "N/A";
     // System.out.println(product + ": $" + price);
+
+    for (ProductData productData : liveProductData) {
+      if (productData.getProductId().equals(product)) {
+        productData.setPrice(price);
+        break;
+      }
+    }
   }
 
   @Override
@@ -57,13 +63,13 @@ public class CoinbaseWebSocketClient extends WebSocketClient {
   }
 
   // public static void main(String[] args) {
-  //   try {
-  //     URI uri = new URI("wss://ws-feed.exchange.coinbase.com");
-  //     CoinbaseWebSocketClient client = new CoinbaseWebSocketClient(uri);
-  //     client.connectBlocking(); // Blocks until the connection is established
-  //   } catch (URISyntaxException | InterruptedException e) {
-  //     e.printStackTrace();
-  //   }
+  // try {
+  // URI uri = new URI("wss://ws-feed.exchange.coinbase.com");
+  // CoinbaseWebSocketClient client = new CoinbaseWebSocketClient(uri);
+  // client.connectBlocking(); // Blocks until the connection is established
+  // } catch (URISyntaxException | InterruptedException e) {
+  // e.printStackTrace();
+  // }
   // }
 
   public ArrayList<ProductData> getLiveData() {
