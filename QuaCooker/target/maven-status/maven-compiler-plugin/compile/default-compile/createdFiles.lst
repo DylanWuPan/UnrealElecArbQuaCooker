@@ -1,4 +1,4 @@
-quacooker\api\ProductData.class
-quacooker\api\CoinbaseWebSocketClient.class
-quacooker\App.class
-quacooker\api\DataFetcher.class
+quacooker/api/CoinbaseWebSocketClient.class
+quacooker/App.class
+quacooker/api/ProductData.class
+quacooker/api/DataFetcher.class
