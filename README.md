@@ -1,3 +1,2 @@
 # ElecArbQuaCooker
-Thomson, Muniappan, MILES, Pan
-Test Change by MBB
+Thomson, Muniappan, Baumal-Bardy, Pan
