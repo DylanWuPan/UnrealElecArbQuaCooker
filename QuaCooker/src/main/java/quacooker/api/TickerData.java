@@ -2,10 +2,10 @@ package quacooker.api;
 
 import java.util.ArrayList;
 
-public class LiveTickerData extends ArrayList<ProductData> {
+public class TickerData extends ArrayList<ProductData> {
   private static final long serialVersionUID = 1L;
 
-  public LiveTickerData() {
+  public TickerData() {
     super();
   }
 

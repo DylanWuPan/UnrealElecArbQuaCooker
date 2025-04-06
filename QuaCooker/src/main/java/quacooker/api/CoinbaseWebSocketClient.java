@@ -1,7 +1,6 @@
 package quacooker.api;
 
 import java.net.URI;
-import java.util.ArrayList;
 
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
@@ -9,15 +8,15 @@ import org.json.JSONObject;
 
 public class CoinbaseWebSocketClient extends WebSocketClient {
   private final String[] product_ids;
-  private final LiveTickerData liveTickerData;
+  private final TickerData tickerData;
 
   public CoinbaseWebSocketClient(URI serverURI, String[] product_ids) {
     super(serverURI);
     this.product_ids = product_ids;
-    this.liveTickerData = new LiveTickerData();
+    this.tickerData = new TickerData();
 
     for (String productId : product_ids) {
-      liveTickerData.add(new ProductData(productId, 0.0));
+      tickerData.add(new ProductData(productId, 0.0));
     }
   }
 
@@ -41,7 +40,7 @@ public class CoinbaseWebSocketClient extends WebSocketClient {
     String product = jsonMessage.has("product_id") ? jsonMessage.getString("product_id") : "N/A";
     // System.out.println(product + ": $" + price);
 
-    ProductData productData = liveTickerData.getProductData(product);
+    ProductData productData = tickerData.getProductData(product);
     if (productData != null) {
       productData.setPrice(price);
     }
@@ -57,7 +56,7 @@ public class CoinbaseWebSocketClient extends WebSocketClient {
     System.err.println("WebSocket error: " + ex.getMessage());
   }
 
-  public ArrayList<ProductData> getLiveData() {
-    return (liveTickerData != null) ? liveTickerData : new LiveTickerData();
+  public TickerData getLiveData() {
+    return (tickerData != null) ? tickerData : new TickerData();
   }
 }
