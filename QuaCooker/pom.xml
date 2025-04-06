@@ -37,6 +37,12 @@
             <artifactId>json</artifactId>
             <version>20210307</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.jfree</groupId>
+            <artifactId>jfreechart</artifactId>
+            <version>1.5.3</version> <!-- You can use the latest version -->
+        </dependency>
     </dependencies>
 
     <build>
