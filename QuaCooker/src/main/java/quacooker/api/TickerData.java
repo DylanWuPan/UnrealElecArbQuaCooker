@@ -3,7 +3,6 @@ package quacooker.api;
 import java.util.ArrayList;
 
 public class TickerData extends ArrayList<ProductData> {
-  private static final long serialVersionUID = 1L;
 
   public TickerData() {
     super();
@@ -16,5 +15,13 @@ public class TickerData extends ArrayList<ProductData> {
       }
     }
     return null;
+  }
+
+  public ArrayList<Double> getPrices() {
+    ArrayList<Double> prices = new ArrayList<>();
+    for (ProductData productData : this) {
+      prices.add(productData.getPrice());
+    }
+    return prices;
   }
 }
