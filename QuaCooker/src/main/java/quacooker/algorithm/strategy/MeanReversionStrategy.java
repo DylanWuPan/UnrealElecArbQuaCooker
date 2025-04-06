@@ -1,5 +1,8 @@
 package quacooker.algorithm.strategy;
 
-public class MeanReversionStrategy {
+/**
+ * A concrete implementation of PairsTradingStrategy using z-score.
+ */
+public class MeanReversionStrategy implements PairsTradingStrategy {
 
 }
