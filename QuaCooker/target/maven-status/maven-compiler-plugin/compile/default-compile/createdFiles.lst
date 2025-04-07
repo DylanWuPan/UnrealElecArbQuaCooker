@@ -1,4 +1,15 @@
+quacooker/algorithm/stats/TimeSeriesUtils.class
+quacooker/UI/WebsiteFX.class
+quacooker/algorithm/model/PairsTrader.class
 quacooker/App.class
+quacooker/algorithm/strategy/MeanReversionStrategy.class
+quacooker/api/TickerData.class
+quacooker/algorithm/stats/StatisticalTests.class
+quacooker/algorithm/strategy/StrategyResult.class
+quacooker/algorithm/visualization/TickerDataGrapher.class
 quacooker/api/CoinbaseWebSocketClient.class
+quacooker/api/HistoricalDataFetcher.class
 quacooker/api/ProductData.class
 quacooker/api/DataFetcher.class
+quacooker/algorithm/stats/SignalGenerator.class
+quacooker/algorithm/strategy/PairsTradingStrategy.class

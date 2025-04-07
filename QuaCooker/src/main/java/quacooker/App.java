@@ -24,9 +24,9 @@ public class App {
         // FETCH HISTORICAL DATA ----
 
         HistoricalDataFetcher historicalDataFetcher = new HistoricalDataFetcher();
-        TickerData btcPrices = historicalDataFetcher.fetchPrices("bitcoin", 10);
-        TickerData ethPrices = historicalDataFetcher.fetchPrices("ethereum", 10);
-        TickerData ethClassicPrices = historicalDataFetcher.fetchPrices("ethereum-classic", 10);
+        TickerData btcPrices = historicalDataFetcher.fetchPrices("bitcoin", 2);
+        TickerData ethPrices = historicalDataFetcher.fetchPrices("ethereum", 2);
+        TickerData ethClassicPrices = historicalDataFetcher.fetchPrices("ethereum-classic", 2);
 
         TickerDataGrapher grapher = new TickerDataGrapher(
                 new ArrayList<>(Arrays.asList(btcPrices, ethPrices, ethClassicPrices)));
