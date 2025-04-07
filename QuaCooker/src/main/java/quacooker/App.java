@@ -1,5 +1,12 @@
 package quacooker;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
+import quacooker.algorithm.visualization.TickerDataGrapher;
+import quacooker.api.HistoricalDataFetcher;
+import quacooker.api.TickerData;
+
 public class App {
     public static void main(String[] args) {
         System.out.println("QUA COOKIN");
@@ -16,12 +23,18 @@ public class App {
 
         // FETCH HISTORICAL DATA ----
 
-        // HistoricalDataFetcher historicalDataFetcher = new HistoricalDataFetcher();
-        // ArrayList<Double> btcPrices =
-        // historicalDataFetcher.fetchDailyPrices("bitcoin", 365);
-        // ArrayList<Double> ethereumPrices =
-        // historicalDataFetcher.fetchDailyPrices("ethereum", 365);
+        HistoricalDataFetcher historicalDataFetcher = new HistoricalDataFetcher();
+        TickerData btcPrices = historicalDataFetcher.fetchPrices("bitcoin", 10);
+        TickerData ethPrices = historicalDataFetcher.fetchPrices("ethereum", 10);
+        TickerData ethClassicPrices = historicalDataFetcher.fetchPrices("ethereum-classic", 10);
 
-        // System.out.println("BTC Prices: " + btcPrices);
+        TickerDataGrapher grapher = new TickerDataGrapher(
+                new ArrayList<>(Arrays.asList(btcPrices, ethPrices, ethClassicPrices)));
+        grapher.plotData();
+
+        // for (ProductData productData : btcPrices) {
+        // System.out.println("BTC Price: $" + productData.getPrice() + " at " +
+        // productData.getTime());
+        // }
     }
 }
