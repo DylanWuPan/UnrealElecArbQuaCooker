@@ -34,7 +34,7 @@ public class TickerDataGrapher {
     });
   }
 
-  private ChartPanel createChartPanel() {
+  public ChartPanel createChartPanel() {
     XYSeriesCollection dataset = new XYSeriesCollection();
 
     for (TickerData tickerData : tickerDataList) {
