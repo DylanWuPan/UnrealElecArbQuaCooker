@@ -8,8 +8,32 @@
 <?import javafx.scene.control.Spinner?>
 
 <TabPane fx:id="mainTabPane" xmlns:fx="http://javafx.com/fxml" fx:controller="quacooker.UI.WebsiteFXController" styleClass="main-tab-pane">
-
     <tabs>
+        <Tab text="Cointegration Testing" closable="false" styleClass="cointegration-testing-tab">
+            <VBox fx:id="cointegrationTestingPane" spacing="10" styleClass="cointegration-testing-pane" alignment="TOP_LEFT">
+                
+                <HBox spacing="10">
+                    <Label text="Coin ID #1:" styleClass="input-label"/>
+                    <TextField fx:id="cointegration_coin1" promptText="e.g., bitcoin" styleClass="coin-input"/>
+                </HBox>
+
+                <HBox spacing="10">
+                    <Label text="Coin ID #2:" styleClass="input-label"/>
+                    <TextField fx:id="cointegration_coin2" promptText="e.g., ethereum" styleClass="coin-input"/>
+                </HBox>
+
+                <HBox spacing="10">
+                    <Label text="Number of Days:" styleClass="input-label"/>
+                    <Spinner fx:id="cointegration_days" promptText="e.g., 30" styleClass="days-input"/>
+                </HBox>
+
+                <Button fx:id="runCointegrationTestButton" text="Run Cointegration Test" onAction="#handleRunCointegrationTest" styleClass="run-button"/>
+
+                <!-- Result display label -->
+                <Label fx:id="cointegrationResultLabel" text="Result will appear here" styleClass="result-label"/>
+
+            </VBox>
+        </Tab>
         <Tab text="Historical Backtesting" closable="false" styleClass="historical-backtesting-tab">
               <BorderPane fx:id="backtestingPane" styleClass="backtesting-pane">
                   <top>
