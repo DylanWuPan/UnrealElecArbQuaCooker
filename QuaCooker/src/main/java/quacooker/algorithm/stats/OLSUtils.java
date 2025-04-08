@@ -1,10 +1,10 @@
 package quacooker.algorithm.stats;
 
+import java.util.ArrayList;
+
 /**
  * Handles simple linear regression.
  */
-import java.util.ArrayList;
-
 public class OLSUtils {
 
     public static RegressionResult simpleLinearRegression(ArrayList<Double> y, ArrayList<Double> x) {
@@ -33,6 +33,18 @@ public class OLSUtils {
         double beta = numerator / denominator;
         double alpha = meanY - beta * meanX;
 
-        return new RegressionResult(alpha, beta);
+        // Calculate residual sum of squares (RSS) for standard error calculation
+        double rss = 0.0;
+        for (int i = 0; i < n; i++) {
+            double xi = x.get(i);
+            double yi = y.get(i);
+            double predicted = alpha + beta * xi;
+            rss += Math.pow(yi - predicted, 2);
+        }
+
+        // Calculate standard error of beta
+        double seBeta = Math.sqrt(rss / (n - 2)) / Math.sqrt(sumX2 - n * meanX * meanX);
+
+        return new RegressionResult(alpha, beta, seBeta);
     }
 }
