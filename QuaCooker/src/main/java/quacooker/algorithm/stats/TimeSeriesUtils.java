@@ -36,13 +36,19 @@ public class TimeSeriesUtils {
 
     public static double calculateMean(double[] data) {
         double mean = 0;
+        double temporarySum=0;
 
+        for (int i=0; i<data.length-1; i++) {
+            temporarySum=+data[i];
+        }
+
+        mean=temporarySum/data.length;
         return mean;
     }
 
     public static double calculateStandardDeviation(double[] data) {
         double sd = 0;
-
+        
         return sd;
     }
 
