@@ -5,4 +5,9 @@ package quacooker.algorithm.stats;
  */
 public class StatisticalTests {
 
+    public static boolean areCointegrated(double[] series1, double[] series2, double significanceLevel) {
+
+        return true;
+    }
+
 }
