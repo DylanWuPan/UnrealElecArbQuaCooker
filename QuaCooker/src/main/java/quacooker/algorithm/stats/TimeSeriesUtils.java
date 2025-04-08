@@ -9,19 +9,28 @@ import java.util.ArrayList;
  */
 public class TimeSeriesUtils {
     
-    public static ArrayList<Double> pricesToReturns(ArrayList<Double> prices) {
-    ArrayList<Double> multiplicativeReturns = new ArrayList<>();
+    /**
+     * Converts a list of prices to multiplicative (log) returns.
+     * @param prices
+     * @return
+     */
+    public static ArrayList<Double> pricesToMultiplicativeReturns(ArrayList<Double> prices) {
+        if (prices.size() < 2) {
+            throw new IllegalArgumentException("Need at least two prices to compute returns.");
+        }
 
-    for (int i = 1; i < prices.size(); i++) {
-      double previousPrice = prices.get(i - 1);
-      double currentPrice = prices.get(i);
+        ArrayList<Double> multiplicativeReturns = new ArrayList<>();
 
-      // Calculate the percentage return (multiplicative)
-      double returnValue = (currentPrice - previousPrice) / previousPrice * 100;
+        for (int i = 1; i < prices.size(); i++) {
+            double previousPrice = prices.get(i - 1);
+            double currentPrice = prices.get(i);
 
-      // Add the return to the list
-      multiplicativeReturns.add(returnValue);
-    }
+            // Calculate the percentage return (multiplicative)
+            double returnValue = Math.log(currentPrice - previousPrice);
+
+            // Add the return to the list
+            multiplicativeReturns.add(returnValue);
+        }
 
     return multiplicativeReturns;
   }

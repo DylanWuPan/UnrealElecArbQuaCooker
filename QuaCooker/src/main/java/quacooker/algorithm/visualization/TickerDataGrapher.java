@@ -39,7 +39,7 @@ public class TickerDataGrapher {
 
     for (TickerData tickerData : tickerDataList) {
       XYSeries series = new XYSeries(tickerData.get(0).getProductId());
-      ArrayList<Double> returns = TimeSeriesUtils.pricesToReturns(tickerData.getPrices());
+      ArrayList<Double> returns = TimeSeriesUtils.pricesToMultiplicativeReturns(tickerData.getPrices());
       for (int i = 0; i < returns.size(); i++) {
         series.add(tickerData.get(i).getTimestamp(), returns.get(i));
       }
