@@ -1,11 +1,13 @@
 package quacooker.algorithm.stats;
 
+import java.util.ArrayList;
+
 /**
  * Cointegration testing
  */
 public class StatisticalTests {
 
-    public static boolean areCointegrated(double[] series1, double[] series2, double significanceLevel) {
+    public static boolean areCointegrated(ArrayList<Double> series1, ArrayList<Double> series2, double significanceLevel) {
 
         return true;
     }
