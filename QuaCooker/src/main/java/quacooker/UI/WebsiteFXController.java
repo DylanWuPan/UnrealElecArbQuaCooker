@@ -13,7 +13,6 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
-import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
@@ -53,7 +52,11 @@ public class WebsiteFXController {
   @FXML
   private TabPane mainTabPane;
 
-  private VBox graphContainer = new VBox();
+  // Separate containers for graphs
+  @FXML
+  private StackPane backtestGraphContainer; // For Backtesting graph
+  @FXML
+  private StackPane cointegrationGraphContainer; // For Cointegration graph
 
   @FXML
   public void initialize() {
@@ -74,19 +77,6 @@ public class WebsiteFXController {
     // Cointegration spinner
     cointegration_days.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 365, 30));
     cointegration_days.setEditable(true);
-
-    // Graph area
-    graphContainer.setSpacing(10);
-    graphContainer.getChildren().add(new Label("Configure and run backtest to view graph."));
-
-    // Tabs for output
-    TabPane graphs = new TabPane();
-    graphs.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
-    graphs.getTabs().add(new Tab("Ticker Data Visualization", graphContainer));
-    graphs.getTabs().add(new Tab("Backtesting Results", new VBox(new Label("Results table goes here..."))));
-
-    backtestingPane.setTop(formBox);
-    backtestingPane.setCenter(graphs);
   }
 
   @FXML
@@ -99,9 +89,7 @@ public class WebsiteFXController {
       TickerData coin1Prices = HistoricalDataFetcher.fetchPrices(coin1, days);
       TickerData coin2Prices = HistoricalDataFetcher.fetchPrices(coin2, days);
 
-      TickerDataGrapher grapher = new TickerDataGrapher(
-          new ArrayList<>(Arrays.asList(coin1Prices, coin2Prices)));
-      ChartPanel chartPanel = grapher.createChartPanel();
+      ChartPanel chartPanel = TickerDataGrapher.graphReturns(new ArrayList<>(Arrays.asList(coin1Prices, coin2Prices)));
 
       SwingNode swingNode = new SwingNode();
       Platform.runLater(() -> {
@@ -109,12 +97,12 @@ public class WebsiteFXController {
         StackPane wrapper = new StackPane(swingNode);
         wrapper.setPrefSize(750, 500);
         wrapper.setStyle("-fx-border-color: lightgray; -fx-border-width: 1;");
-        graphContainer.getChildren().setAll(wrapper);
+        backtestGraphContainer.getChildren().setAll(wrapper);
       });
 
     } catch (Exception e) {
       Platform.runLater(() -> {
-        graphContainer.getChildren().setAll(new Label("Failed to load graph: " + e.getMessage()));
+        backtestGraphContainer.getChildren().setAll(new Label("Failed to load graph: " + e.getMessage()));
       });
       e.printStackTrace();
     }
@@ -127,28 +115,49 @@ public class WebsiteFXController {
     int days = cointegration_days.getValue();
 
     try {
+      // Fetch data for both coins
       TickerData coin1Data = HistoricalDataFetcher.fetchPrices(coin1, days);
       TickerData coin2Data = HistoricalDataFetcher.fetchPrices(coin2, days);
 
-      TickerDataGrapher grapher = new TickerDataGrapher(
-          new ArrayList<>(Arrays.asList(coin1Data, coin2Data)));
-      ChartPanel chartPanel = grapher.createChartPanel();
+      // Create individual charts for both coins
+      ChartPanel coin1ChartPanel = TickerDataGrapher.graphPrices(coin1Data, "red");
+      ChartPanel coin2ChartPanel = TickerDataGrapher.graphPrices(coin2Data, "blue");
 
-      SwingNode swingNode = new SwingNode();
+      // Create SwingNode containers for each chart
+      SwingNode coin1SwingNode = new SwingNode();
+      SwingNode coin2SwingNode = new SwingNode();
+
       Platform.runLater(() -> {
-        swingNode.setContent(chartPanel);
-        StackPane wrapper = new StackPane(swingNode);
-        wrapper.setPrefSize(750, 500);
-        wrapper.setStyle("-fx-border-color: lightgray; -fx-border-width: 1;");
-        graphContainer.getChildren().setAll(wrapper);
+        // Set the chart content
+        coin1SwingNode.setContent(coin1ChartPanel);
+        coin2SwingNode.setContent(coin2ChartPanel);
+
+        // Create wrappers for layout and style them
+        StackPane coin1Wrapper = new StackPane(coin1SwingNode);
+        StackPane coin2Wrapper = new StackPane(coin2SwingNode);
+
+        // Set preferred sizes and styling for each graph
+        coin1Wrapper.setPrefSize(750, 500);
+        coin2Wrapper.setPrefSize(750, 500);
+        coin1Wrapper.setStyle("-fx-border-color: lightgray; -fx-border-width: 1;");
+        coin2Wrapper.setStyle("-fx-border-color: lightgray; -fx-border-width: 1;");
+
+        // Place the graphs one above the other
+        VBox graphContainer = new VBox(10);
+        graphContainer.getChildren().addAll(coin1Wrapper, coin2Wrapper);
+
+        // Set the content of the container in the UI
+        cointegrationGraphContainer.getChildren().setAll(graphContainer);
       });
 
+      // Display the cointegration result
       cointegrationResultLabel.setText("Cointegrated: " + StatisticalTests.areCointegrated(coin1Data.getPrices(),
-          coin2Data.getPrices(), days));
+          coin2Data.getPrices(), -2.8));
 
     } catch (Exception e) {
       Platform.runLater(() -> {
-        graphContainer.getChildren().setAll(new Label("Failed to load cointegration data: " + e.getMessage()));
+        cointegrationGraphContainer.getChildren()
+            .setAll(new Label("Failed to load cointegration data: " + e.getMessage()));
       });
       e.printStackTrace();
     }
