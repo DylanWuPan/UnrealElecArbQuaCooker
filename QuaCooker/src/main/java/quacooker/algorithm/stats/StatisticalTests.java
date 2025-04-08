@@ -8,11 +8,11 @@ import java.util.ArrayList;
 public class StatisticalTests {
 
     /**
-     * Engle Granger Test for cointegration
+     * Engle-Granger Test for cointegration
      * Y = series1, X = series2
      * @param series1
      * @param series2
-     * @param significanceLevel
+     * @param criticalValue
      * @return
      */
     public static boolean areCointegrated(ArrayList<Double> series1, ArrayList<Double> series2, double criticalValue) {
@@ -28,14 +28,16 @@ public class StatisticalTests {
 
         // Step 3: Perform Augmented Dickey-Fuller (ADF) test on residuals
         double adfStat = adfTestStatistic(residuals);
+        // Return true if the ADF statistic is below the critical value, implying cointegration
         return adfStat < criticalValue;
     }
 
-    // Computes the ADF test statistic for a time series (simplified)
+    // Computes the ADF test statistic for a time series (using the t-statistic of beta)
     public static double adfTestStatistic(ArrayList<Double> series) {
         ArrayList<Double> deltaSeries = new ArrayList<>();
         ArrayList<Double> laggedSeries = new ArrayList<>();
 
+        // Create differenced series (Δy)
         for (int i = 1; i < series.size(); i++) {
             deltaSeries.add(series.get(i) - series.get(i - 1));
             laggedSeries.add(series.get(i - 1));
@@ -44,7 +46,8 @@ public class StatisticalTests {
         // Regress deltaSeries = alpha + beta * laggedSeries
         RegressionResult result = OLSUtils.simpleLinearRegression(deltaSeries, laggedSeries);
 
-        return result.beta; // Placeholder: real ADF would use the t-statistic
+        // Return the t-statistic of beta (this is our ADF statistic)
+        return result.beta / result.seBeta; // This is the t-statistic for beta
     }
 
 }
