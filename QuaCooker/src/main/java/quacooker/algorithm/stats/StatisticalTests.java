@@ -50,4 +50,23 @@ public class StatisticalTests {
         return result.beta / result.seBeta; // This is the t-statistic for beta
     }
 
+    public static void printSpread(ArrayList<Double> series1, ArrayList<Double> series2) {
+        // Step 1: Run OLS regression: series1 = alpha + beta * series2
+        RegressionResult regression = OLSUtils.simpleLinearRegression(series1, series2);
+    
+        // Step 2: Calculate the spread for each pair of values
+        ArrayList<Double> spread = new ArrayList<>();
+        for (int i = 0; i < series1.size(); i++) {
+            double predicted = regression.alpha + regression.beta * series2.get(i);
+            double spreadValue = series1.get(i) - predicted;  // Spread is the residuals
+            spread.add(spreadValue);
+        }
+    
+        // Step 3: Print the spread values
+        System.out.println("Spread (Linear Combination):");
+        for (int i = 0; i < spread.size(); i++) {
+            System.out.println("Time " + i + ": " + spread.get(i));
+        }
+    }
+
 }
