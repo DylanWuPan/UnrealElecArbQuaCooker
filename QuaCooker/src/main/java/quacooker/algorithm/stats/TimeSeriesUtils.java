@@ -8,28 +8,10 @@ import java.util.ArrayList;
  * rolling window calculations.
  */
 public class TimeSeriesUtils {
-<<<<<<< HEAD
 
-    public static ArrayList<Double> pricesToReturns(ArrayList<Double> prices) {
-        ArrayList<Double> multiplicativeReturns = new ArrayList<>();
-
-        for (int i = 1; i < prices.size(); i++) {
-            double previousPrice = prices.get(i - 1);
-            double currentPrice = prices.get(i);
-
-            // Calculate the percentage return (multiplicative)
-            double returnValue = (currentPrice - previousPrice) / previousPrice * 100;
-
-            // Add the return to the list
-            multiplicativeReturns.add(returnValue);
-        }
-
-        return multiplicativeReturns;
-    }
-=======
-    
     /**
      * Converts a list of prices to multiplicative (log) returns.
+     * 
      * @param prices
      * @return
      */
@@ -50,7 +32,8 @@ public class TimeSeriesUtils {
             // Add the return to the list
             multiplicativeReturns.add(returnValue);
         }
->>>>>>> 9e6dd5add3bbd87b47bea53e4a1d6ce41078bedd
+        return multiplicativeReturns;
+    }
 
     public static double calculateMean(double[] data) {
         double mean = 0;
