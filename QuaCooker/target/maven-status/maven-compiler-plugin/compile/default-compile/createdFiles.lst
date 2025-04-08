@@ -5,6 +5,7 @@ quacooker/App.class
 quacooker/algorithm/strategy/MeanReversionStrategy.class
 quacooker/api/TickerData.class
 quacooker/algorithm/stats/StatisticalTests.class
+quacooker/UI/WebsiteFXController.class
 quacooker/algorithm/strategy/StrategyResult.class
 quacooker/algorithm/visualization/TickerDataGrapher.class
 quacooker/api/CoinbaseWebSocketClient.class

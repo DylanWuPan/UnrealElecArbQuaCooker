@@ -75,16 +75,13 @@
                 <configuration>
                     <mainClass>quacooker.UI.WebsiteFX</mainClass>
                 </configuration>
-            </plugin>
-
-            <!-- Optional: compile and run your app easily -->
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <version>3.1.0</version>
-                <configuration>
-                    <mainClass>quacooker.UI.WebsiteFX</mainClass>
-                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
