@@ -1,6 +1,6 @@
 package quacooker.UI;
 
-import java.util.ArrayList;
+import java.util.ArrayList; // Covers ArrayList and Arrays
 import java.util.Arrays;
 
 import org.jfree.chart.ChartPanel;
@@ -33,7 +33,7 @@ public class WebsiteFX extends Application {
     private String strategy;
     private int numDays;
 
-    private VBox graphContainer; // will hold the graph so we can replace it dynamically
+    private VBox graphContainer;
 
     @Override
     public void start(Stage primaryStage) {
@@ -47,7 +47,7 @@ public class WebsiteFX extends Application {
         tabPane.getTabs().addAll(backtestingTab, liveTestingTab);
         tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
 
-        Scene scene = new Scene(tabPane, 900, 600);
+        Scene scene = new Scene(tabPane, 1000, 1000);
         primaryStage.setScene(scene);
         primaryStage.show();
     }
@@ -55,17 +55,14 @@ public class WebsiteFX extends Application {
     private BorderPane createBacktestingPane() {
         BorderPane pane = new BorderPane();
 
-        // Top panel: input form
         VBox formPanel = createBacktestFormPanel();
         pane.setTop(formPanel);
 
-        // Center panel: tabbed graph/results view
         TabPane graphTabs = new TabPane();
         graphTabs.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
 
-        // Each tab must take a Node as content (like VBox, BorderPane, etc.)
-        Node dataGraphContent = createDataGraphTab(); // Must return a Node
-        Node resultsContent = createResultsPane(); // Must return a Node
+        Node dataGraphContent = createDataGraphTab();
+        Node resultsContent = createResultsPane();
 
         Tab dataGraphTab = new Tab("Ticker Data Visualization", dataGraphContent);
         Tab resultsTab = new Tab("Backtesting Results", resultsContent);
@@ -101,13 +98,10 @@ public class WebsiteFX extends Application {
 
         Button runButton = new Button("Iniate Backtesting!");
         runButton.setOnAction(e -> {
-            // Save selections
             coin1Id = coin1Selector.getValue();
             coin2Id = coin2Selector.getValue();
             numDays = daysSpinner.getValue();
             strategy = strategySelector.getValue();
-
-            // Generate and update graph
             updateDataGraph();
         });
 
@@ -131,31 +125,23 @@ public class WebsiteFX extends Application {
     }
 
     private void updateDataGraph() {
-        HistoricalDataFetcher historicalDataFetcher = new HistoricalDataFetcher();
-
         try {
-            // Fetch prices using current selections
-            TickerData coin1Prices = historicalDataFetcher.fetchPrices(coin1Id, numDays);
-            TickerData coin2Prices = historicalDataFetcher.fetchPrices(coin2Id, numDays);
+            TickerData coin1Prices = HistoricalDataFetcher.fetchPrices(coin1Id, numDays);
+            TickerData coin2Prices = HistoricalDataFetcher.fetchPrices(coin2Id, numDays);
 
-            // Generate chart using JFreeChart
             TickerDataGrapher grapher = new TickerDataGrapher(
                     new ArrayList<>(Arrays.asList(coin1Prices, coin2Prices)));
             ChartPanel chartPanel = grapher.createChartPanel();
 
-            // Create a SwingNode to embed ChartPanel into JavaFX
             SwingNode swingNode = new SwingNode();
 
-            // Set Swing content safely on JavaFX thread
             Platform.runLater(() -> {
                 swingNode.setContent(chartPanel);
 
-                // Optional wrapper to control layout/size
                 StackPane wrapper = new StackPane(swingNode);
                 wrapper.setPrefSize(750, 500);
                 wrapper.setStyle("-fx-border-color: lightgray; -fx-border-width: 1;");
 
-                // Clear previous chart and add new one
                 graphContainer.getChildren().clear();
                 graphContainer.getChildren().add(wrapper);
             });
