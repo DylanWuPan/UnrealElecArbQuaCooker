@@ -1,1 +1,43 @@
+# Ignore compiled class files
 *.class
+
+# Ignore log files
+*.log
+
+# Ignore temporary files created by IDEs
+.idea/               # JetBrains IDEs (IntelliJ IDEA, PhpStorm, etc.)
+*.iml               # IntelliJ IDEA project files
+*.ipr
+*.iws
+.vscode/            # Visual Studio Code
+*.sublime-workspace # Sublime Text workspace files
+*.sublime-project   # Sublime Text project files
+
+# Ignore build output directories (Maven, Gradle, etc.)
+/target/            # Maven build directory
+/build/             # Gradle build directory
+
+# Ignore JAR files
+*.jar
+
+# Ignore Maven wrapper files
+.mvn/
+
+# Ignore user-specific files
+*.user
+*.swp
+*.swo
+.DS_Store           # macOS Finder metadata
+Thumbs.db           # Windows image thumbnail cache
+
+# Ignore compiled native code
+*.dll
+*.so
+*.dylib
+
+# Ignore Node.js dependencies (if applicable)
+node_modules/
+
+# Ignore application settings and configurations (optional)
+*.properties
+*.env
