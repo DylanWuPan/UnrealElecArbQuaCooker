@@ -49,7 +49,7 @@ public class TickerDataGrapher {
     JFreeChart chart = ChartFactory.createXYLineChart(
         "Ticker Data", // Chart title
         "Time", // X-axis Label
-        "Price Returns (%)", // Y-axis Label
+        "Log Returns (%)", // Y-axis Label
         dataset, // Dataset
         PlotOrientation.VERTICAL, // Orientation
         true, // Include legend
@@ -60,7 +60,7 @@ public class TickerDataGrapher {
     // Customize the plot to have better visibility for both lines
     XYPlot plot = chart.getXYPlot();
     NumberAxis xAxis = new NumberAxis("Time");
-    NumberAxis yAxis = new NumberAxis("Price Returns (%)");
+    NumberAxis yAxis = new NumberAxis("Log Returns (%)");
 
     xAxis.setAutoRangeIncludesZero(false);
     yAxis.setAutoRangeIncludesZero(false);
