@@ -1,0 +1,29 @@
+.section-title {
+  -fx-font-size: 16px;
+  -fx-font-weight: bold;
+}
+
+.button {
+  -fx-background-color: #4caf50;
+  -fx-text-fill: white;
+}
+
+.tab-pane {
+  -fx-tab-min-width: 150px;
+}
+
+/* Style for the formBox */
+.form-box {
+  -fx-background-color: #ff0000; /* Light gray background */
+  -fx-padding: 20px; /* Add padding around the box */
+  -fx-border-radius: 10px; /* Rounded corners */
+  -fx-border-color: #ccc; /* Light border color */
+  -fx-border-width: 1px; /* Border thickness */
+}
+
+.form-box .combo-box,
+.form-box .spinner {
+  -fx-pref-width: 200px; /* Set preferred width for ComboBoxes and Spinner */
+  -fx-padding: 5px;
+  -fx-background-insets: 5;
+}

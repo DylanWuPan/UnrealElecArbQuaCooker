@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.Spinner?>
+
+<TabPane fx:id="mainTabPane" xmlns:fx="http://javafx.com/fxml" fx:controller="quacooker.UI.WebsiteFXController" styleClass="main-tab-pane">
+
+    <tabs>
+        <Tab text="Historical Backtesting" closable="false" styleClass="historical-backtesting-tab">
+              <BorderPane fx:id="backtestingPane" styleClass="backtesting-pane">
+                  <top>
+                    <VBox fx:id="formBox" spacing="20" styleClass="form-box">
+                        <ComboBox fx:id="coin1Selector" promptText="Select Coin 1" styleClass="coin-selector"/>
+                        <ComboBox fx:id="coin2Selector" promptText="Select Coin 2" styleClass="coin-selector"/>
+                        <Spinner fx:id="daysSpinner" styleClass="days-spinner"/>
+                        <ComboBox fx:id="strategySelector" promptText="Select Strategy" styleClass="strategy-selector"/>
+                        <Button fx:id="runBacktestButton" text="Run Backtesting" onAction="#handleRunBacktest" styleClass="run-backtest-button"/>
+                    </VBox>
+                </top>
+            </BorderPane>
+        </Tab>
+
+        <Tab text="Live Testing" closable="false" styleClass="live-testing-tab">
+            <VBox fx:id="liveTestingPane" spacing="10" styleClass="live-testing-pane">
+            </VBox>
+        </Tab>
+    </tabs>
+
+</TabPane>
