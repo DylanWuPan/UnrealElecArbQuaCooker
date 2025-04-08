@@ -41,3 +41,4 @@ node_modules/
 # Ignore application settings and configurations (optional)
 *.properties
 *.env
+*.lst

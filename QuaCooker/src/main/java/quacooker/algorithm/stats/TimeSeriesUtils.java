@@ -8,9 +8,10 @@ import java.util.ArrayList;
  * rolling window calculations.
  */
 public class TimeSeriesUtils {
-    
+
     /**
      * Converts a list of prices to multiplicative (log) returns.
+     * 
      * @param prices
      * @return
      */
@@ -31,50 +32,45 @@ public class TimeSeriesUtils {
             // Add the return to the list
             multiplicativeReturns.add(returnValue);
         }
+        return multiplicativeReturns;
+    }
 
-    return multiplicativeReturns;
-  }
+    public static double calculateMean(double[] data) {
+        double mean = 0;
 
-  public static double calculateMean(double[] data) {
-    double mean = 0;
+        return mean;
+    }
 
-    return mean;
-}
+    public static double calculateStandardDeviation(double[] data) {
+        double sd = 0;
 
-public static double calculateStandardDeviation(double[] data) {
-    double sd = 0;
+        return sd;
+    }
 
-    return sd;
-}
+    public static double calculateCorrelation(double[] series1, double[] series2) {
+        double correlation = 0;
 
-public static double calculateCorrelation(double[] series1, double[] series2) {
-    double correlation = 0;
+        return correlation;
+    }
 
-    return correlation;
-}
+    public static double[] calculateZScores(double[] data) {
+        double[] ZScores = { 0, 1 };
 
-public static double[] calculateZScores(double[] data) {
-    double[] ZScores = {0, 1};
+        return ZScores;
+    }
 
-    return ZScores;
-}
+    // --- Moving Averages ---
 
+    public static double[] calculateEMA(double[] data, int period) {
+        double[] EMA = { 0, 1 };
 
+        return EMA;
+    }
 
-// --- Moving Averages ---
+    public static double[] calculateSMA(double[] data, int period) {
+        double[] SMA = { 0, 1 };
 
-public static double[] calculateEMA(double[] data, int period) {
-    double[] EMA = {0, 1};
+        return SMA;
+    }
 
-
-    return EMA;
-}
-
-public static double[] calculateSMA(double[] data, int period) {
-    double[] SMA = {0, 1};
-
-
-    return SMA;
-}
-  
 }
