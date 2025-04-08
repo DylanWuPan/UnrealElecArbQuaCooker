@@ -11,7 +11,6 @@ public class TimeSeriesUtils {
 
     /**
      * Converts a list of prices to multiplicative (log) returns.
-     * 
      * @param prices
      * @return
      */
@@ -27,7 +26,7 @@ public class TimeSeriesUtils {
             double currentPrice = prices.get(i);
 
             // Calculate the percentage return (multiplicative)
-            double returnValue = Math.log(currentPrice - previousPrice);
+            double returnValue = Math.log(currentPrice / previousPrice);
 
             // Add the return to the list
             multiplicativeReturns.add(returnValue);
