@@ -8,20 +8,18 @@ import java.util.ArrayList;
  * rolling window calculations.
  */
 public class TimeSeriesUtils {
-  public static ArrayList<Double> pricesToReturns(ArrayList<Double> prices) {
-    ArrayList<Double> returns = new ArrayList<>();
+    public static ArrayList<Double> pricesToReturns(ArrayList<Double> prices) {
+        ArrayList<Double> returns = new ArrayList<>();
 
-    for (int i = 1; i < prices.size(); i++) {
-      double previousPrice = prices.get(i - 1);
-      double currentPrice = prices.get(i);
+        for (int i = 1; i < prices.size(); i++) {
+            double previousPrice = prices.get(i - 1);
+            double currentPrice = prices.get(i);
 
-      // Calculate the percentage return
-      double returnValue = (currentPrice - previousPrice) / previousPrice * 100;
+            double returnValue = (currentPrice - previousPrice) / previousPrice * 100;
 
-      // Add the return to the list
-      returns.add(returnValue);
+            returns.add(returnValue);
+        }
+
+        return returns;
     }
-
-    return returns;
-  }
 }
