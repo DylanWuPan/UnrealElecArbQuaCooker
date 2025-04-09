@@ -40,11 +40,15 @@ public class HistoricalDataFetcher {
                 JSONObject json = new JSONObject(response.body());
                 JSONArray priceArray = json.getJSONArray("prices");
 
+                long firstTimestamp = 0;
                 for (int i = 0; i < priceArray.length(); i++) {
                     JSONArray pricePoint = priceArray.getJSONArray(i);
                     double price = pricePoint.getDouble(1);
                     long timestamp = pricePoint.getLong(0);
-                    prices.add(new ProductData(coinId, roundToHundredths(price), timestamp));
+                    if (i == 0) {
+                        firstTimestamp = timestamp;
+                    }
+                    prices.add(new ProductData(coinId, roundToHundredths(price), timestamp - firstTimestamp));
                 }
 
                 cache.put(cacheKey, prices);

@@ -1,127 +1,91 @@
 package quacooker.algorithm.visualization;
 
-import java.awt.Color;
 import java.util.ArrayList;
 
-import org.jfree.chart.ChartFactory;
-import org.jfree.chart.ChartPanel;
-import org.jfree.chart.JFreeChart;
-import org.jfree.chart.axis.NumberAxis;
-import org.jfree.chart.plot.PlotOrientation;
-import org.jfree.chart.plot.XYPlot;
-import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
-import org.jfree.data.xy.XYSeries;
-import org.jfree.data.xy.XYSeriesCollection;
-
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
 import quacooker.algorithm.stats.TimeSeriesUtils;
 import quacooker.api.TickerData;
 
 public class TickerDataGrapher {
-  public static ChartPanel graphReturns(ArrayList<TickerData> tickerDataList) {
-    XYSeriesCollection dataset = new XYSeriesCollection();
+
+  // Graphs returns for a list of TickerData
+  public static LineChart<Number, Number> graphReturns(ArrayList<TickerData> tickerDataList) {
+    // X and Y axes
+    NumberAxis xAxis = new NumberAxis();
+    NumberAxis yAxis = new NumberAxis();
+    yAxis.setLabel("Returns (%)");
+    xAxis.setLabel("Time (ms)");
+
+    // Create the chart
+    LineChart<Number, Number> chart = new LineChart<>(xAxis, yAxis);
 
     for (TickerData tickerData : tickerDataList) {
-      XYSeries series = new XYSeries(tickerData.get(0).getProductId());
+      XYChart.Series<Number, Number> series = new XYChart.Series<>();
+      series.setName(tickerData.get(0).getProductId());
+
+      // Get the log returns
       ArrayList<Double> returns = TimeSeriesUtils.pricesToMultiplicativeReturns(tickerData.getPrices());
       for (int i = 0; i < returns.size(); i++) {
-        series.add(tickerData.get(i).getTimestamp(), returns.get(i));
+        series.getData().add(new XYChart.Data<>(tickerData.get(i).getTimestamp(), returns.get(i)));
       }
-      dataset.addSeries(series);
+
+      // Add the series to the chart
+      chart.getData().add(series);
     }
 
-    JFreeChart chart = ChartFactory.createXYLineChart(
-        "Ticker Data", // Chart title
-        "Time", // X-axis Label
-        "Log Returns (%)", // Y-axis Label
-        dataset, // Dataset
-        PlotOrientation.VERTICAL, // Orientation
-        true, // Include legend
-        true, // Tooltips
-        false // URLs
-    );
+    chart.setCreateSymbols(false); // Optional: Hide the data points, keeping only the line
 
-    // Customize the plot to have better visibility for both lines
-    XYPlot plot = chart.getXYPlot();
-    NumberAxis xAxis = new NumberAxis("Time");
-    NumberAxis yAxis = new NumberAxis("Log Returns (%)");
-
-    xAxis.setAutoRangeIncludesZero(false);
-    yAxis.setAutoRangeIncludesZero(false);
-
-    plot.setDomainPannable(true);
-    plot.setRangePannable(true);
-    plot.setDomainAxis(xAxis);
-    plot.setRangeAxis(yAxis);
-
-    // Return the ChartPanel
-    return new ChartPanel(chart);
+    return chart;
   }
 
-  public static ChartPanel graphPrices(TickerData tickerData, String color) {
-    XYSeriesCollection dataset = new XYSeriesCollection();
+  public static LineChart<Number, Number> graphPrices(TickerData tickerData, String color) {
+    // X and Y axes with auto-ranging enabled
+    NumberAxis xAxis = new NumberAxis();
+    NumberAxis yAxis = new NumberAxis();
 
-    String coinID = tickerData.get(0).getProductId();
-    XYSeries series = new XYSeries(coinID);
-    ArrayList<Double> prices = tickerData.getPrices(); // Use raw prices instead of returns
+    // Set labels
+    yAxis.setLabel("Price ($)");
+    xAxis.setLabel("Time (ms)");
+
+    // Enable auto-ranging for dynamic axis scaling
+    yAxis.setAutoRanging(true);
+    xAxis.setAutoRanging(true);
+
+    // Force y-axis to not start at zero
+    yAxis.setForceZeroInRange(false);
+
+    LineChart<Number, Number> chart = new LineChart<>(xAxis, yAxis);
+
+    // Get the coin ID for display
+    String coinId = tickerData.get(0).getProductId();
+
+    // Set chart title to show which coin is being displayed
+    chart.setTitle("Price Chart: " + coinId);
+
+    XYChart.Series<Number, Number> series = new XYChart.Series<>();
+    series.setName(coinId); // This will show in the legend
+
+    ArrayList<Double> prices = tickerData.getPrices();
     for (int i = 0; i < prices.size(); i++) {
-      series.add(tickerData.get(i).getTimestamp(), prices.get(i)); // Plot raw prices
+      series.getData().add(new XYChart.Data<>(tickerData.get(i).getTimestamp(), prices.get(i)));
     }
-    dataset.addSeries(series);
 
-    String title = coinID;
+    chart.getData().add(series);
 
-    JFreeChart chart = ChartFactory.createXYLineChart(
-        title, // Chart title
-        "Time", // X-axis Label
-        "Price", // Y-axis Label
-        dataset, // Dataset
-        PlotOrientation.VERTICAL, // Orientation
-        true, // Include legend
-        true, // Tooltips
-        false // URLs
-    );
+    // Apply custom color to the line
+    series.getNode().setStyle("-fx-stroke: " + color + ";");
 
-    // Customize the plot
-    XYPlot plot = chart.getXYPlot();
-    NumberAxis xAxis = new NumberAxis("Time (ms)");
-    NumberAxis yAxis = new NumberAxis("Price ($)");
+    // Make legend visible to show which coin the line represents
+    chart.setLegendVisible(true);
 
-    xAxis.setAutoRangeIncludesZero(false);
-    yAxis.setAutoRangeIncludesZero(false);
+    // Hide symbols (data points)
+    chart.setCreateSymbols(false);
 
-    plot.setDomainPannable(true);
-    plot.setRangePannable(true);
-    plot.setDomainAxis(xAxis);
-    plot.setRangeAxis(yAxis);
+    // Make chart animation smoother (optional)
+    chart.setAnimated(false);
 
-    // Set custom color for the series
-    XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer(true, false);
-    renderer.setSeriesPaint(0, parseColor(color));
-    plot.setRenderer(renderer);
-
-    return new ChartPanel(chart);
-  }
-
-  private static Color parseColor(String colorName) {
-    switch (colorName.toLowerCase()) {
-      case "red":
-        return Color.RED;
-      case "blue":
-        return Color.BLUE;
-      case "green":
-        return Color.GREEN;
-      case "orange":
-        return Color.ORANGE;
-      case "pink":
-        return Color.PINK;
-      case "yellow":
-        return Color.YELLOW;
-      case "cyan":
-        return Color.CYAN;
-      case "gray":
-        return Color.GRAY;
-      default:
-        return Color.BLACK;
-    }
+    return chart;
   }
 }

@@ -1,14 +1,13 @@
 package quacooker.UI;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-
-import org.jfree.chart.ChartPanel;
 
 import javafx.application.Platform;
-import javafx.embed.swing.SwingNode;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Spinner;
@@ -77,35 +76,39 @@ public class WebsiteFXController {
     // Cointegration spinner
     cointegration_days.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 365, 30));
     cointegration_days.setEditable(true);
+    cointegration_coin1.setText("bitcoin");
+    cointegration_coin2.setText("ethereum");
   }
 
   @FXML
   public void handleRunBacktest() {
-    String coin1 = coin1Selector.getValue();
-    String coin2 = coin2Selector.getValue();
-    int days = daysSpinner.getValue();
+    // String coin1 = coin1Selector.getValue();
+    // String coin2 = coin2Selector.getValue();
+    // int days = daysSpinner.getValue();
 
-    try {
-      TickerData coin1Prices = HistoricalDataFetcher.fetchPrices(coin1, days);
-      TickerData coin2Prices = HistoricalDataFetcher.fetchPrices(coin2, days);
+    // try {
+    // TickerData coin1Prices = HistoricalDataFetcher.fetchPrices(coin1, days);
+    // TickerData coin2Prices = HistoricalDataFetcher.fetchPrices(coin2, days);
 
-      ChartPanel chartPanel = TickerDataGrapher.graphReturns(new ArrayList<>(Arrays.asList(coin1Prices, coin2Prices)));
+    // ChartPanel chartPanel = TickerDataGrapher.graphReturns(new
+    // ArrayList<>(Arrays.asList(coin1Prices, coin2Prices)));
 
-      SwingNode swingNode = new SwingNode();
-      Platform.runLater(() -> {
-        swingNode.setContent(chartPanel);
-        StackPane wrapper = new StackPane(swingNode);
-        wrapper.setPrefSize(750, 500);
-        wrapper.setStyle("-fx-border-color: lightgray; -fx-border-width: 1;");
-        backtestGraphContainer.getChildren().setAll(wrapper);
-      });
+    // SwingNode swingNode = new SwingNode();
+    // Platform.runLater(() -> {
+    // swingNode.setContent(chartPanel);
+    // StackPane wrapper = new StackPane(swingNode);
+    // wrapper.setPrefSize(750, 500);
+    // wrapper.setStyle("-fx-border-color: lightgray; -fx-border-width: 1;");
+    // backtestGraphContainer.getChildren().setAll(wrapper);
+    // });
 
-    } catch (Exception e) {
-      Platform.runLater(() -> {
-        backtestGraphContainer.getChildren().setAll(new Label("Failed to load graph: " + e.getMessage()));
-      });
-      e.printStackTrace();
-    }
+    // } catch (Exception e) {
+    // Platform.runLater(() -> {
+    // backtestGraphContainer.getChildren().setAll(new Label("Failed to load graph:
+    // " + e.getMessage()));
+    // });
+    // e.printStackTrace();
+    // }
   }
 
   @FXML
@@ -119,44 +122,39 @@ public class WebsiteFXController {
       TickerData coin1Data = HistoricalDataFetcher.fetchPrices(coin1, days);
       TickerData coin2Data = HistoricalDataFetcher.fetchPrices(coin2, days);
 
-      // Create individual charts for both coins
-      ChartPanel coin1ChartPanel = TickerDataGrapher.graphPrices(coin1Data, "red");
-      ChartPanel coin2ChartPanel = TickerDataGrapher.graphPrices(coin2Data, "blue");
+      // Create individual charts
+      LineChart<Number, Number> coin1PricesChart = TickerDataGrapher.graphPrices(coin1Data, "red");
+      LineChart<Number, Number> coin2PricesChart = TickerDataGrapher.graphPrices(coin2Data, "blue");
 
-      // Create SwingNode containers for each chart
-      SwingNode coin1SwingNode = new SwingNode();
-      SwingNode coin2SwingNode = new SwingNode();
+      ArrayList<Double> spread = null;
+      boolean cointegrated = StatisticalTests.areCointegrated(coin1Data.getPrices(), coin2Data.getPrices(), -2.86);
+      if (cointegrated) {
+        spread = StatisticalTests.getSpread(coin1Data.getPrices(), coin2Data.getPrices());
+      }
+
+      final ArrayList<Double> finalSpread = spread;
 
       Platform.runLater(() -> {
-        // Set the chart content
-        coin1SwingNode.setContent(coin1ChartPanel);
-        coin2SwingNode.setContent(coin2ChartPanel);
-
-        // Create wrappers for layout and style them
-        StackPane coin1Wrapper = new StackPane(coin1SwingNode);
-        StackPane coin2Wrapper = new StackPane(coin2SwingNode);
-
-        // Set preferred sizes and styling for each graph
+        StackPane coin1Wrapper = new StackPane(coin1PricesChart);
+        StackPane coin2Wrapper = new StackPane(coin2PricesChart);
         coin1Wrapper.setPrefSize(750, 500);
         coin2Wrapper.setPrefSize(750, 500);
         coin1Wrapper.setStyle("-fx-border-color: lightgray; -fx-border-width: 1;");
         coin2Wrapper.setStyle("-fx-border-color: lightgray; -fx-border-width: 1;");
 
-        // Place the graphs one above the other
         VBox graphContainer = new VBox(10);
         graphContainer.getChildren().addAll(coin1Wrapper, coin2Wrapper);
 
-        // Set the content of the container in the UI
+        if (cointegrated && finalSpread != null) {
+          cointegrationResultLabel.setText("The series are cointegrated. Spread chart below.");
+
+          graphContainer.getChildren().add(createSpreadChart(finalSpread));
+        } else {
+          cointegrationResultLabel.setText("The series are not cointegrated.");
+        }
+
         cointegrationGraphContainer.getChildren().setAll(graphContainer);
       });
-
-      // Display the cointegration result
-      if (StatisticalTests.areCointegrated(coin1Data.getPrices(),
-          coin2Data.getPrices(), -3.45)) {
-        cointegrationResultLabel.setText("The series are cointegrated. Proceeding to print the spread...");
-      } else {
-        cointegrationResultLabel.setText("The series are not cointegrated.");
-      }
 
     } catch (Exception e) {
       Platform.runLater(() -> {
@@ -165,5 +163,44 @@ public class WebsiteFXController {
       });
       e.printStackTrace();
     }
+  }
+
+  private static LineChart<Number, Number> createSpreadChart(ArrayList<Double> spread) {
+    // Build the spread line chart
+    NumberAxis xAxis = new NumberAxis();
+    NumberAxis yAxis = new NumberAxis();
+    xAxis.setLabel("Time Index");
+    yAxis.setLabel("Spread");
+
+    // Calculate dynamic min and max for y-axis based on spread values
+    double minSpread = Double.MAX_VALUE;
+    double maxSpread = Double.MIN_VALUE;
+
+    for (Double spreadValue : spread) {
+      if (spreadValue < minSpread)
+        minSpread = spreadValue;
+      if (spreadValue > maxSpread)
+        maxSpread = spreadValue;
+    }
+
+    // Add some padding to the min and max values for better visibility
+    double padding = (maxSpread - minSpread) * 0.1; // 10% padding
+    yAxis.setLowerBound(minSpread - padding);
+    yAxis.setUpperBound(maxSpread + padding);
+
+    LineChart<Number, Number> spreadChart = new LineChart<>(xAxis, yAxis);
+    spreadChart.setTitle("Spread");
+    XYChart.Series<Number, Number> spreadSeries = new XYChart.Series<>();
+    spreadSeries.setName("Spread");
+
+    for (int i = 0; i < spread.size(); i++) {
+      spreadSeries.getData().add(new XYChart.Data<>(i, spread.get(i)));
+    }
+
+    spreadChart.getData().add(spreadSeries);
+    spreadChart.setPrefSize(750, 300);
+    spreadChart.setCreateSymbols(false);
+
+    return spreadChart;
   }
 }
