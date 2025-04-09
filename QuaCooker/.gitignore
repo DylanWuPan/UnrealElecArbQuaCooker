@@ -14,8 +14,9 @@
 *.sublime-project   # Sublime Text project files
 
 # Ignore build output directories (Maven, Gradle, etc.)
-/target/            # Maven build directory
-/build/             # Gradle build directory
+# Ignore build output directories (Maven, Gradle, etc.)
+target/             # Remove the leading slash for better compatibility
+build/              # Remove the leading slash for better compatibility
 
 # Ignore JAR files
 *.jar
