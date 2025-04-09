@@ -151,8 +151,12 @@ public class WebsiteFXController {
       });
 
       // Display the cointegration result
-      cointegrationResultLabel.setText("Cointegrated: " + StatisticalTests.areCointegrated(coin1Data.getPrices(),
-          coin2Data.getPrices(), -2.8));
+      if (StatisticalTests.areCointegrated(coin1Data.getPrices(),
+          coin2Data.getPrices(), -3.45)) {
+        cointegrationResultLabel.setText("The series are cointegrated. Proceeding to print the spread...");
+      } else {
+        cointegrationResultLabel.setText("The series are not cointegrated.");
+      }
 
     } catch (Exception e) {
       Platform.runLater(() -> {

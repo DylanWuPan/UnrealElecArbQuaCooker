@@ -4,6 +4,8 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -11,8 +13,14 @@ import org.json.JSONObject;
 public class HistoricalDataFetcher {
 
     private static final HttpClient client = HttpClient.newHttpClient();
+    private static final Map<String, TickerData> cache = new ConcurrentHashMap<>();
 
     public static TickerData fetchPrices(String coinId, int days) {
+        String cacheKey = coinId + ":" + days;
+        if (cache.containsKey(cacheKey)) {
+            return cache.get(cacheKey);
+        }
+
         TickerData prices = new TickerData();
 
         try {
@@ -28,23 +36,22 @@ public class HistoricalDataFetcher {
 
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-            int statusCode = response.statusCode();
-
-            if (statusCode == 200) {
+            if (response.statusCode() == 200) {
                 JSONObject json = new JSONObject(response.body());
                 JSONArray priceArray = json.getJSONArray("prices");
 
                 for (int i = 0; i < priceArray.length(); i++) {
                     JSONArray pricePoint = priceArray.getJSONArray(i);
-                    double price = pricePoint.getDouble(1); // index 1 = price
+                    double price = pricePoint.getDouble(1);
                     long timestamp = pricePoint.getLong(0);
                     prices.add(new ProductData(coinId, roundToHundredths(price), timestamp));
                 }
 
-            } else if (statusCode == 429) {
+                cache.put(cacheKey, prices);
+            } else if (response.statusCode() == 429) {
                 System.err.println("Error: Rate limit exceeded (HTTP 429). Please try again later.");
             } else {
-                System.err.println("Unexpected response status: " + statusCode);
+                System.err.println("Unexpected response status: " + response.statusCode());
                 System.err.println("Response body: " + response.body());
             }
 
