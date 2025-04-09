@@ -11,15 +11,13 @@ import javafx.stage.Stage;
 public class WebsiteFX extends Application {
     @Override
     public void start(Stage stage) throws Exception {
-        // Load FXML
         URL fxmlLocation = getClass().getResource("/quacooker/UI/MainView.fxml");
         if (fxmlLocation == null) {
-            throw new RuntimeException("MainView.fxml not found! Make sure it's in src/main/resources/quacooker/UI/");
+            throw new RuntimeException("MainView.fxml not found!");
         }
 
         Parent root = FXMLLoader.load(fxmlLocation);
 
-        // Load CSS
         URL cssLocation = getClass().getResource("/quacooker/UI/style.css");
         if (cssLocation != null) {
             Scene scene = new Scene(root, 1000, 1000);
