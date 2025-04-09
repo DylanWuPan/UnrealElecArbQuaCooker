@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /Users/dylan/Documents/Coding/RL/APCS/UnrealElecArbQuaCooker/QuaCooker/src/main/java/quacooker/App.java
 /Users/dylan/Documents/Coding/RL/APCS/UnrealElecArbQuaCooker/QuaCooker/src/main/java/quacooker/UI/WebsiteFX.java
 /Users/dylan/Documents/Coding/RL/APCS/UnrealElecArbQuaCooker/QuaCooker/src/main/java/quacooker/UI/WebsiteFXController.java
@@ -17,3 +18,23 @@
 /Users/dylan/Documents/Coding/RL/APCS/UnrealElecArbQuaCooker/QuaCooker/src/main/java/quacooker/api/HistoricalDataFetcher.java
 /Users/dylan/Documents/Coding/RL/APCS/UnrealElecArbQuaCooker/QuaCooker/src/main/java/quacooker/api/ProductData.java
 /Users/dylan/Documents/Coding/RL/APCS/UnrealElecArbQuaCooker/QuaCooker/src/main/java/quacooker/api/TickerData.java
+=======
+/Users/quinnthomson/Documents/GitHub/UnrealElecArbQuaCooker/QuaCooker/src/main/java/quacooker/App.java
+/Users/quinnthomson/Documents/GitHub/UnrealElecArbQuaCooker/QuaCooker/src/main/java/quacooker/UI/WebsiteFX.java
+/Users/quinnthomson/Documents/GitHub/UnrealElecArbQuaCooker/QuaCooker/src/main/java/quacooker/UI/WebsiteFXController.java
+/Users/quinnthomson/Documents/GitHub/UnrealElecArbQuaCooker/QuaCooker/src/main/java/quacooker/algorithm/model/PairsTrader.java
+/Users/quinnthomson/Documents/GitHub/UnrealElecArbQuaCooker/QuaCooker/src/main/java/quacooker/algorithm/stats/OLSUtils.java
+/Users/quinnthomson/Documents/GitHub/UnrealElecArbQuaCooker/QuaCooker/src/main/java/quacooker/algorithm/stats/RegressionResult.java
+/Users/quinnthomson/Documents/GitHub/UnrealElecArbQuaCooker/QuaCooker/src/main/java/quacooker/algorithm/stats/SignalGenerator.java
+/Users/quinnthomson/Documents/GitHub/UnrealElecArbQuaCooker/QuaCooker/src/main/java/quacooker/algorithm/stats/StatisticalTests.java
+/Users/quinnthomson/Documents/GitHub/UnrealElecArbQuaCooker/QuaCooker/src/main/java/quacooker/algorithm/stats/TimeSeriesUtils.java
+/Users/quinnthomson/Documents/GitHub/UnrealElecArbQuaCooker/QuaCooker/src/main/java/quacooker/algorithm/strategy/MeanReversionStrategy.java
+/Users/quinnthomson/Documents/GitHub/UnrealElecArbQuaCooker/QuaCooker/src/main/java/quacooker/algorithm/strategy/PairsTradingStrategy.java
+/Users/quinnthomson/Documents/GitHub/UnrealElecArbQuaCooker/QuaCooker/src/main/java/quacooker/algorithm/strategy/StrategyResult.java
+/Users/quinnthomson/Documents/GitHub/UnrealElecArbQuaCooker/QuaCooker/src/main/java/quacooker/algorithm/visualization/TickerDataGrapher.java
+/Users/quinnthomson/Documents/GitHub/UnrealElecArbQuaCooker/QuaCooker/src/main/java/quacooker/api/CoinbaseWebSocketClient.java
+/Users/quinnthomson/Documents/GitHub/UnrealElecArbQuaCooker/QuaCooker/src/main/java/quacooker/api/DataFetcher.java
+/Users/quinnthomson/Documents/GitHub/UnrealElecArbQuaCooker/QuaCooker/src/main/java/quacooker/api/HistoricalDataFetcher.java
+/Users/quinnthomson/Documents/GitHub/UnrealElecArbQuaCooker/QuaCooker/src/main/java/quacooker/api/ProductData.java
+/Users/quinnthomson/Documents/GitHub/UnrealElecArbQuaCooker/QuaCooker/src/main/java/quacooker/api/TickerData.java
+>>>>>>> main
