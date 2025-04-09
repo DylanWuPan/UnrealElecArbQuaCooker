@@ -2,75 +2,90 @@ package quacooker.algorithm.visualization;
 
 import java.util.ArrayList;
 
-import javax.swing.JFrame;
-import javax.swing.SwingUtilities;
-
-import org.jfree.chart.ChartFactory;
-import org.jfree.chart.ChartPanel;
-import org.jfree.chart.JFreeChart;
-import org.jfree.chart.axis.NumberAxis;
-import org.jfree.chart.plot.PlotOrientation;
-import org.jfree.chart.plot.XYPlot;
-import org.jfree.data.xy.XYSeries;
-import org.jfree.data.xy.XYSeriesCollection;
-
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
 import quacooker.algorithm.stats.TimeSeriesUtils;
 import quacooker.api.TickerData;
 
 public class TickerDataGrapher {
-  ArrayList<TickerData> tickerDataList;
 
-  public TickerDataGrapher(ArrayList<TickerData> tickerDataList) {
-    this.tickerDataList = tickerDataList;
-  }
+  // Graphs returns for a list of TickerData
+  public static LineChart<Number, Number> graphReturns(ArrayList<TickerData> tickerDataList) {
+    // X and Y axes
+    NumberAxis xAxis = new NumberAxis();
+    NumberAxis yAxis = new NumberAxis();
+    yAxis.setLabel("Returns (%)");
+    xAxis.setLabel("Time (ms)");
 
-  public void plotData() {
-    SwingUtilities.invokeLater(() -> {
-      JFrame frame = new JFrame("Ticker Data");
-      frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-      frame.add(createChartPanel());
-      frame.pack();
-      frame.setVisible(true);
-    });
-  }
-
-  public ChartPanel createChartPanel() {
-    XYSeriesCollection dataset = new XYSeriesCollection();
+    // Create the chart
+    LineChart<Number, Number> chart = new LineChart<>(xAxis, yAxis);
 
     for (TickerData tickerData : tickerDataList) {
-      XYSeries series = new XYSeries(tickerData.get(0).getProductId());
+      XYChart.Series<Number, Number> series = new XYChart.Series<>();
+      series.setName(tickerData.get(0).getProductId());
+
+      // Get the log returns
       ArrayList<Double> returns = TimeSeriesUtils.pricesToMultiplicativeReturns(tickerData.getPrices());
       for (int i = 0; i < returns.size(); i++) {
-        series.add(tickerData.get(i).getTimestamp(), returns.get(i));
+        series.getData().add(new XYChart.Data<>(tickerData.get(i).getTimestamp(), returns.get(i)));
       }
-      dataset.addSeries(series);
+
+      // Add the series to the chart
+      chart.getData().add(series);
     }
 
-    JFreeChart chart = ChartFactory.createXYLineChart(
-        "Ticker Data", // Chart title
-        "Time", // X-axis Label
-        "Log Returns (%)", // Y-axis Label
-        dataset, // Dataset
-        PlotOrientation.VERTICAL, // Orientation
-        true, // Include legend
-        true, // Tooltips
-        false // URLs
-    );
+    chart.setCreateSymbols(false); // Optional: Hide the data points, keeping only the line
 
-    // Customize the plot to have better visibility for both lines
-    XYPlot plot = chart.getXYPlot();
-    NumberAxis xAxis = new NumberAxis("Time");
-    NumberAxis yAxis = new NumberAxis("Log Returns (%)");
+    return chart;
+  }
 
-    xAxis.setAutoRangeIncludesZero(false);
-    yAxis.setAutoRangeIncludesZero(false);
+  public static LineChart<Number, Number> graphPrices(TickerData tickerData, String color) {
+    // X and Y axes with auto-ranging enabled
+    NumberAxis xAxis = new NumberAxis();
+    NumberAxis yAxis = new NumberAxis();
 
-    plot.setDomainPannable(true);
-    plot.setRangePannable(true);
-    plot.setDomainAxis(xAxis);
-    plot.setRangeAxis(yAxis);
+    // Set labels
+    yAxis.setLabel("Price ($)");
+    xAxis.setLabel("Time (ms)");
 
-    // Return the ChartPanel
-    return new ChartPanel(chart);
+    // Enable auto-ranging for dynamic axis scaling
+    yAxis.setAutoRanging(true);
+    xAxis.setAutoRanging(true);
+
+    // Force y-axis to not start at zero
+    yAxis.setForceZeroInRange(false);
+
+    LineChart<Number, Number> chart = new LineChart<>(xAxis, yAxis);
+
+    // Get the coin ID for display
+    String coinId = tickerData.get(0).getProductId();
+
+    // Set chart title to show which coin is being displayed
+    chart.setTitle("Price Chart: " + coinId);
+
+    XYChart.Series<Number, Number> series = new XYChart.Series<>();
+    series.setName(coinId); // This will show in the legend
+
+    ArrayList<Double> prices = tickerData.getPrices();
+    for (int i = 0; i < prices.size(); i++) {
+      series.getData().add(new XYChart.Data<>(tickerData.get(i).getTimestamp(), prices.get(i)));
+    }
+
+    chart.getData().add(series);
+
+    // Apply custom color to the line
+    series.getNode().setStyle("-fx-stroke: " + color + ";");
+
+    // Make legend visible to show which coin the line represents
+    chart.setLegendVisible(true);
+
+    // Hide symbols (data points)
+    chart.setCreateSymbols(false);
+
+    // Make chart animation smoother (optional)
+    chart.setAnimated(false);
+
+    return chart;
   }
 }
