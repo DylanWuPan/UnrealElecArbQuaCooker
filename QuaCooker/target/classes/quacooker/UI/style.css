@@ -1,29 +1,87 @@
-.section-title {
-  -fx-font-size: 16px;
-  -fx-font-weight: bold;
+/* ========== General Styles ========== */
+.root {
+  -fx-font-family: "Segoe UI", sans-serif;
+  -fx-font-size: 14px;
 }
 
-.button {
-  -fx-background-color: #4caf50;
-  -fx-text-fill: white;
-}
-
+/* ========== Tab Pane ========== */
 .tab-pane {
   -fx-tab-min-width: 150px;
+  -fx-background-color: #f0f0f0;
 }
 
-/* Style for the formBox */
+/* ========== Section Titles ========== */
+.section-title {
+  -fx-font-size: 18px;
+  -fx-font-weight: bold;
+  -fx-text-fill: #333;
+  -fx-padding: 0 0 10 0;
+}
+
+/* ========== Labels ========== */
+.input-label {
+  -fx-font-size: 14px;
+  -fx-text-fill: #444;
+  -fx-min-width: 160px;
+}
+
+/* ========== Inputs ========== */
+.text-field,
+.combo-box,
+.spinner,
+.date-picker {
+  -fx-pref-width: 200px;
+  -fx-padding: 6 8;
+  -fx-background-radius: 5;
+  -fx-border-radius: 5;
+}
+
+/* ========== Buttons ========== */
+.run-button {
+  -fx-background-color: #4caf50;
+  -fx-text-fill: white;
+  -fx-padding: 8 14;
+  -fx-font-weight: bold;
+  -fx-cursor: hand;
+  -fx-background-radius: 5;
+  -fx-border-radius: 5;
+}
+
+.run-button:hover {
+  -fx-background-color: #45a049;
+}
+
+/* ========== Result Label ========== */
+.result-label {
+  -fx-text-fill: #666;
+  -fx-font-style: italic;
+  -fx-padding: 5 0 0 0;
+}
+
+/* ========== Containers ========== */
+.pairs-trader-pane,
+.cointegration-testing-pane {
+  -fx-padding: 20;
+  -fx-background-color: #fafafa;
+  -fx-spacing: 15;
+}
+
+.form-section {
+  -fx-spacing: 15;
+}
+
+.graph-container {
+  -fx-border-color: #ddd;
+  -fx-border-width: 1;
+  -fx-background-color: white;
+  -fx-padding: 10;
+}
+
+/* ========== Utility ========== */
 .form-box {
-  -fx-background-color: #ff0000; /* Light gray background */
-  -fx-padding: 20px; /* Add padding around the box */
-  -fx-border-radius: 10px; /* Rounded corners */
-  -fx-border-color: #ccc; /* Light border color */
-  -fx-border-width: 1px; /* Border thickness */
-}
-
-.form-box .combo-box,
-.form-box .spinner {
-  -fx-pref-width: 200px; /* Set preferred width for ComboBoxes and Spinner */
-  -fx-padding: 5px;
-  -fx-background-insets: 5;
+  -fx-background-color: #f9f9f9;
+  -fx-padding: 20;
+  -fx-border-radius: 10;
+  -fx-border-color: #ccc;
+  -fx-border-width: 1;
 }

@@ -10,27 +10,62 @@
 <TabPane fx:id="mainTabPane" xmlns:fx="http://javafx.com/fxml" fx:controller="quacooker.UI.WebsiteFXController" styleClass="main-tab-pane">
     <tabs>
         <Tab text="Cointegration Testing" closable="false" styleClass="cointegration-testing-tab">
-            <VBox fx:id="cointegrationTestingPane" spacing="10" styleClass="cointegration-testing-pane" alignment="TOP_LEFT">
-                <HBox spacing="10">
-                    <Label text="Coin ID #1:" styleClass="input-label"/>
-                    <TextField fx:id="cointegration_coin1" promptText="e.g., bitcoin" styleClass="coin-input"/>
-                </HBox>
-                <HBox spacing="10">
-                    <Label text="Coin ID #2:" styleClass="input-label"/>
-                    <TextField fx:id="cointegration_coin2" promptText="e.g., ethereum" styleClass="coin-input"/>
-                </HBox>
+            <VBox fx:id="cointegrationTestingPane" spacing="20" styleClass="cointegration-testing-pane" alignment="TOP_LEFT">
+                <VBox spacing="15" styleClass="form-section">
+                    <Label text="Cointegration Test Configuration" styleClass="section-title"/>
 
-                <HBox spacing="10">
-                    <Label text="Number of Days:" styleClass="input-label"/>
-                    <Spinner fx:id="cointegration_days" promptText="e.g., 30" styleClass="days-input"/>
-                </HBox>
-                <Button fx:id="runCointegrationTestButton" text="Run Cointegration Test" onAction="#handleRunCointegrationTest" styleClass="run-button"/>
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <Label text="Coin ID #1:" styleClass="input-label"/>
+                        <TextField fx:id="cointegration_coin1" promptText="e.g., bitcoin" styleClass="coin-input"/>
+                    </HBox>
+
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <Label text="Coin ID #2:" styleClass="input-label"/>
+                        <TextField fx:id="cointegration_coin2" promptText="e.g., ethereum" styleClass="coin-input"/>
+                    </HBox>
+
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <Label text="Number of Days:" styleClass="input-label"/>
+                        <Spinner fx:id="cointegration_days" promptText="e.g., 30" styleClass="days-input"/>
+                    </HBox>
+
+                    <Button fx:id="runCointegrationTestButton" text="Run Cointegration Test" onAction="#handleRunCointegrationTest" styleClass="run-button"/>
+                </VBox>
+
                 <Label fx:id="cointegrationResultLabel" text="Result will appear here" styleClass="result-label"/>
                 <StackPane fx:id="cointegrationGraphContainer" prefHeight="500" styleClass="graph-container"/>
             </VBox>
         </Tab>
-        <Tab text="Live Testing" closable="false" styleClass="live-testing-tab">
-            <VBox fx:id="liveTestingPane" spacing="10" styleClass="live-testing-pane">
+        <Tab text="Pairs Trader" closable="false" styleClass="pairs-trader-tab">
+            <VBox fx:id="pairsTraderPane" spacing="20" styleClass="pairs-trader-pane" alignment="TOP_LEFT">
+                <VBox spacing="15" styleClass="form-section">
+                    <Label text="Pairs Trader Configuration" styleClass="section-title"/>
+
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <Label text="Coin ID #1:" styleClass="input-label"/>
+                        <TextField fx:id="pairsTrader_coin1" promptText="e.g., bitcoin" styleClass="coin-input"/>
+                    </HBox>
+
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <Label text="Coin ID #2:" styleClass="input-label"/>
+                        <TextField fx:id="pairsTrader_coin2" promptText="e.g., ethereum" styleClass="coin-input"/>
+                    </HBox>
+
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <Label text="Start Date:" styleClass="input-label"/>
+                        <DatePicker fx:id="pairsTrader_startDate" styleClass="date-picker"/>
+                    </HBox>
+
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <Label text="Cointegration Buffer Days:" styleClass="input-label"/>
+                        <Spinner fx:id="pairsTrader_bufferDays" styleClass="buffer-days-spinner"/>
+                    </HBox>
+
+                    <Button text="Run Pairs Trader" fx:id="runPairsTraderButton" onAction="#handleRunPairsTrader" styleClass="run-button"/>
+                </VBox>
+
+                <Label fx:id="pairsTraderResultLabel" text="Results will be displayed here." styleClass="result-label"/>
+                <StackPane fx:id="pairsTraderGraphContainer" prefHeight="500" styleClass="graph-container"/>
             </VBox>
         </Tab>
     </tabs>
