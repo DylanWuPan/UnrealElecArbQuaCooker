@@ -1,22 +1,37 @@
 package quacooker.algorithm.model;
 
+import quacooker.algorithm.strategy.*;
+import quacooker.algorithm.stats.*;
+import java.util.ArrayList;
+
 /**
  * Represents a trade: open date, close date, entry/exit z-score, PnL, etc.
  */
 public class PairsTrader {
-  /*
-   * PAIRS TRADER LOGIC:
-   * 1 trade per day
-   * 
-   * Parameters:
-   * coin ids
-   * start date
-   * cointegration testing length (how many days in the past to cointegrate and
-   * calculate alpha/beta values)
-   * 
-   * Logic:
-   * 1. cointegrate on specified time length, calculate alpha/beta values
-   * 2. fetch today's prices, determine actions, take actions
-   * 3. repeat
-   */
+
+    private final ArrayList<Double> series1;
+    private final ArrayList<Double> series2;
+    private final PairsTradingStrategy strategy;
+
+    public PairsTrader(ArrayList<Double> series1, ArrayList<Double> series2, PairsTradingStrategy strategy) {
+        this.series1 = series1;
+        this.series2 = series2;
+        this.strategy = strategy;
+    }
+
+    public StrategyResult runStrategy() {
+        return strategy.run(series1, series2);
+    }
+
+    public ArrayList<Double> getSeries1() {
+        return series1;
+    }
+
+    public ArrayList<Double> getSeries2() {
+        return series2;
+    }
+
+    public PairsTradingStrategy getStrategy() {
+        return strategy;
+    }
 }
