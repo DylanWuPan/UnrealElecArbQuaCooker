@@ -27,6 +27,9 @@ public class App {
         pairsTradeLedger.add(trade1);
         pairsTradeLedger.add(trade2);
 
+        trade1.sell(200, 200, tradeDate1);
+        trade2.sell(3000, 3000, tradeDate2);
+
         System.out.println("Total Revenue: " + pairsTradeLedger.getTotalRevenue());
         System.out.println("Unsold Trades: " + pairsTradeLedger.getUnsoldTrades().size());
     }
