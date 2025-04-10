@@ -1,5 +1,6 @@
 package quacooker.UI;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 import javafx.application.Platform;
@@ -8,6 +9,7 @@ import javafx.fxml.FXML;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
@@ -29,7 +31,20 @@ public class WebsiteFXController {
   @FXML
   private Label cointegrationResultLabel;
   @FXML
-  private StackPane cointegrationGraphContainer; // For Cointegration graph
+  private StackPane cointegrationGraphContainer;
+
+  @FXML
+  private TextField pairsTrader_coin1;
+  @FXML
+  private TextField pairsTrader_coin2;
+  @FXML
+  private DatePicker pairsTrader_startDate;
+  @FXML
+  private Spinner<Integer> pairsTrader_bufferDays;
+  @FXML
+  private Label pairsTraderResultLabel;
+  @FXML
+  private StackPane pairsTraderGraphContainer;
 
   @FXML
   public void initialize() {
@@ -37,6 +52,13 @@ public class WebsiteFXController {
     cointegration_days.setEditable(true);
     cointegration_coin1.setText("bitcoin");
     cointegration_coin2.setText("ethereum");
+
+    pairsTrader_bufferDays.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 365, 30));
+    pairsTrader_bufferDays.setEditable(true);
+    pairsTrader_coin1.setText("bitcoin");
+    pairsTrader_coin2.setText("ethereum");
+    pairsTrader_startDate.setValue(LocalDate.now());
+    pairsTrader_startDate.setEditable(false);
   }
 
   @FXML
@@ -89,6 +111,19 @@ public class WebsiteFXController {
       });
       e.printStackTrace();
     }
+  }
+
+  @FXML
+  public void handleRunPairsTrader(ActionEvent event) {
+    String coin1 = pairsTrader_coin1.getText();
+    String coin2 = pairsTrader_coin2.getText();
+    LocalDate startDate = pairsTrader_startDate.getValue();
+    int bufferDays = pairsTrader_bufferDays.getValue();
+
+    // TODO: Implement logic
+    System.out.println(
+        "Run Pairs Trader for: " + coin1 + ", " + coin2 + ", Start Date: " + startDate + ", Buffer: " + bufferDays);
+    pairsTraderResultLabel.setText("Running Pairs Trader...");
   }
 
   private static LineChart<Number, Number> createSpreadChart(ArrayList<Double> spread) {

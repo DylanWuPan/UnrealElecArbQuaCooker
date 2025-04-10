@@ -74,7 +74,6 @@
 
     <build>
         <plugins>
-            <!-- JavaFX Maven Plugin -->
             <plugin>
                 <groupId>org.openjfx</groupId>
                 <artifactId>javafx-maven-plugin</artifactId>
@@ -83,14 +82,12 @@
                     <mainClass>quacooker.UI.WebsiteFX</mainClass>
                 </configuration>
             </plugin>
-
-            <!-- Optional: compile and run your app easily -->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
                 <version>3.1.0</version>
                 <configuration>
-                    <mainClass>quacooker.UI.WebsiteFX</mainClass>
+                    <mainClass>quacooker.App</mainClass>
                 </configuration>
             </plugin>
         </plugins>
