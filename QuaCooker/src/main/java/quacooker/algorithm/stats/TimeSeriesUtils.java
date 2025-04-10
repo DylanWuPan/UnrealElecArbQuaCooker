@@ -48,6 +48,19 @@ public class TimeSeriesUtils {
 
     public static double calculateStandardDeviation(double[] data) {
         double sd = 0;
+        double sum = 0;
+        for (double num : data) {
+            sum += num;
+            }
+        double mean = sum / data.length;
+
+        double sumSquaredDifferences = 0;
+        for (double num : data) {
+            sumSquaredDifferences += Math.pow(num - mean, 2);
+        }
+        double variance = sumSquaredDifferences / data.length;
+
+        sd = Math.sqrt(variance);
         
         return sd;
     }
