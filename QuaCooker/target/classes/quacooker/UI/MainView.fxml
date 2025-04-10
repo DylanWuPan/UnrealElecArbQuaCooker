@@ -11,13 +11,10 @@
     <tabs>
         <Tab text="Cointegration Testing" closable="false" styleClass="cointegration-testing-tab">
             <VBox fx:id="cointegrationTestingPane" spacing="10" styleClass="cointegration-testing-pane" alignment="TOP_LEFT">
-                
-                <!-- Inputs -->
                 <HBox spacing="10">
                     <Label text="Coin ID #1:" styleClass="input-label"/>
                     <TextField fx:id="cointegration_coin1" promptText="e.g., bitcoin" styleClass="coin-input"/>
                 </HBox>
-
                 <HBox spacing="10">
                     <Label text="Coin ID #2:" styleClass="input-label"/>
                     <TextField fx:id="cointegration_coin2" promptText="e.g., ethereum" styleClass="coin-input"/>
@@ -27,31 +24,11 @@
                     <Label text="Number of Days:" styleClass="input-label"/>
                     <Spinner fx:id="cointegration_days" promptText="e.g., 30" styleClass="days-input"/>
                 </HBox>
-
-                <!-- Button -->
                 <Button fx:id="runCointegrationTestButton" text="Run Cointegration Test" onAction="#handleRunCointegrationTest" styleClass="run-button"/>
-
-                <!-- Result label -->
                 <Label fx:id="cointegrationResultLabel" text="Result will appear here" styleClass="result-label"/>
-
-                <!-- Graph placeholder for Cointegration -->
                 <StackPane fx:id="cointegrationGraphContainer" prefHeight="500" styleClass="graph-container"/>
             </VBox>
         </Tab>
-        <Tab text="Historical Backtesting" closable="false" styleClass="historical-backtesting-tab">
-              <BorderPane fx:id="backtestingPane" styleClass="backtesting-pane">
-                  <top>
-                    <VBox fx:id="formBox" spacing="20" styleClass="form-box">
-                        <ComboBox fx:id="coin1Selector" promptText="Select Coin 1" styleClass="coin-selector"/>
-                        <ComboBox fx:id="coin2Selector" promptText="Select Coin 2" styleClass="coin-selector"/>
-                        <Spinner fx:id="daysSpinner" styleClass="days-spinner"/>
-                        <ComboBox fx:id="strategySelector" promptText="Select Strategy" styleClass="strategy-selector"/>
-                        <Button fx:id="runBacktestButton" text="Run Backtesting" onAction="#handleRunBacktest" styleClass="run-backtest-button"/>
-                    </VBox>
-                </top>
-            </BorderPane>
-        </Tab>
-
         <Tab text="Live Testing" closable="false" styleClass="live-testing-tab">
             <VBox fx:id="liveTestingPane" spacing="10" styleClass="live-testing-pane">
             </VBox>
