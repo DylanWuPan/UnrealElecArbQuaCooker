@@ -5,6 +5,12 @@ import java.util.ArrayList;
 /**
  * Defines the strategy interface -- all strategies should implement this.
  */
-public interface PairsTradingStrategy {
-    StrategyResult run(ArrayList<Double> series1, ArrayList<Double> series2);
+public abstract class PairsTradingStrategy {
+    double NOTIONAL;
+
+    public PairsTradingStrategy(double notional) {
+        this.NOTIONAL = notional;
+    }
+
+    public abstract PairsTradingSignal getSignal(ArrayList<Double> series1, ArrayList<Double> series2);
 }

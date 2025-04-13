@@ -1,5 +1,6 @@
 package quacooker.trading;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class PairsTradeLedger extends ArrayList<PairsTrade> {
@@ -23,5 +24,11 @@ public class PairsTradeLedger extends ArrayList<PairsTrade> {
       }
     }
     return unsoldTrades;
+  }
+
+  public void sellUnsoldTrades(double coin1Price, double coin2Price) {
+    for (PairsTrade trade : this.getUnsoldTrades()) {
+      trade.sell(coin1Price, coin2Price, LocalDate.now());
+    }
   }
 }

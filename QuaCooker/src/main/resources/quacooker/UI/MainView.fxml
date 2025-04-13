@@ -61,6 +61,11 @@
                         <Spinner fx:id="pairsTrader_bufferDays" styleClass="buffer-days-spinner"/>
                     </HBox>
 
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <Label text="Notional:" styleClass="input-label"/>
+                        <TextField fx:id="pairsTrader_notional" promptText="e.g., 10000" styleClass="notional-input"/>
+                    </HBox>
+
                     <Button text="Run Pairs Trader" fx:id="runPairsTraderButton" onAction="#handleRunPairsTrader" styleClass="run-button"/>
                 </VBox>
 

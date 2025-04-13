@@ -1,6 +1,7 @@
 package quacooker.UI;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 
 import javafx.application.Platform;
@@ -16,10 +17,13 @@ import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import quacooker.algorithm.model.PairsTrader;
 import quacooker.algorithm.stats.StatisticalTests;
+import quacooker.algorithm.strategy.MeanReversionStrategy;
 import quacooker.algorithm.visualization.TickerDataGrapher;
 import quacooker.api.HistoricalDataFetcher;
 import quacooker.api.TickerData;
+import quacooker.trading.PairsTradeLedger;
 
 public class WebsiteFXController {
   @FXML
@@ -44,6 +48,8 @@ public class WebsiteFXController {
   @FXML
   private Label pairsTraderResultLabel;
   @FXML
+  private TextField pairsTrader_notional;
+  @FXML
   private StackPane pairsTraderGraphContainer;
 
   @FXML
@@ -59,6 +65,7 @@ public class WebsiteFXController {
     pairsTrader_coin2.setText("ethereum");
     pairsTrader_startDate.setValue(LocalDate.now());
     pairsTrader_startDate.setEditable(false);
+    pairsTrader_notional.setText("1000");
   }
 
   @FXML
@@ -119,10 +126,48 @@ public class WebsiteFXController {
     String coin2 = pairsTrader_coin2.getText();
     LocalDate startDate = pairsTrader_startDate.getValue();
     int bufferDays = pairsTrader_bufferDays.getValue();
+    double notional = Double.parseDouble(pairsTrader_notional.getText());
+    if (notional <= 0) {
+      pairsTraderResultLabel.setText("Notional must be greater than 0.");
+      return;
+    }
+    if (startDate == null) {
+      pairsTraderResultLabel.setText("Start date is required.");
+      return;
+    }
+    if (coin1.isEmpty() || coin2.isEmpty()) {
+      pairsTraderResultLabel.setText("Both coins are required.");
+      return;
+    }
+    if (coin1.equals(coin2)) {
+      pairsTraderResultLabel.setText("Coins must be different.");
+      return;
+    }
+    if (bufferDays <= 0) {
+      pairsTraderResultLabel.setText("Buffer days must be greater than 0.");
+      return;
+    }
 
-    // TODO: Implement logic
-    System.out.println(
-        "Run Pairs Trader for: " + coin1 + ", " + coin2 + ", Start Date: " + startDate + ", Buffer: " + bufferDays);
+    PairsTrader trader = new PairsTrader(coin1, coin2,
+        new MeanReversionStrategy(notional));
+    long numDays = ChronoUnit.DAYS.between(startDate, LocalDate.now());
+    ArrayList<Double> results = trader.backtest((int) numDays, bufferDays);
+    LineChart<Number, Number> resultsChart = graphResults(results, "green");
+
+    Platform.runLater(() -> {
+      StackPane resultsPane = new StackPane(resultsChart);
+      resultsPane.setPrefSize(750, 500);
+      resultsPane.setStyle("-fx-border-color: lightgray; -fx-border-width: 1;");
+
+      VBox graphContainer = new VBox(10);
+      graphContainer.getChildren().addAll(resultsPane);
+      pairsTraderGraphContainer.getChildren().setAll(graphContainer);
+    });
+
+    PairsTradeLedger ledger = trader.getLedger();
+    System.out.println("Total Revenue: " + ledger.getTotalRevenue());
+    System.out.println("Unsold Trades: " + ledger.getUnsoldTrades().size());
+    System.out.println("Total Trades: " + ledger.size());
     pairsTraderResultLabel.setText("Running Pairs Trader...");
   }
 
@@ -160,5 +205,38 @@ public class WebsiteFXController {
     spreadChart.setCreateSymbols(false);
 
     return spreadChart;
+  }
+
+  public static LineChart<Number, Number> graphResults(ArrayList<Double> results, String color) {
+    NumberAxis xAxis = new NumberAxis();
+    NumberAxis yAxis = new NumberAxis();
+    yAxis.setLabel("Revenue ($)");
+    xAxis.setLabel("Time (days)");
+
+    yAxis.setAutoRanging(true);
+    xAxis.setAutoRanging(true);
+    yAxis.setForceZeroInRange(false);
+    xAxis.setForceZeroInRange(false);
+
+    LineChart<Number, Number> chart = new LineChart<>(xAxis, yAxis);
+
+    chart.setTitle("Pairs Trading Results");
+
+    XYChart.Series<Number, Number> series = new XYChart.Series<>();
+    series.setName("Pairs Trading Results");
+
+    for (int i = 0; i < results.size(); i++) {
+      series.getData().add(new XYChart.Data<>(i, results.get(i)));
+    }
+
+    chart.getData().add(series);
+
+    series.getNode().setStyle("-fx-stroke: " + color + ";");
+
+    chart.setLegendVisible(true);
+    chart.setCreateSymbols(false);
+    chart.setAnimated(false);
+
+    return chart;
   }
 }

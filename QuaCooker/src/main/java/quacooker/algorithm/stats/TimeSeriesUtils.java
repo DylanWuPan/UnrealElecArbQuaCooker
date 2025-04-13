@@ -1,6 +1,7 @@
 package quacooker.algorithm.stats;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * Contains utility methods including moving average, z-score, spread
@@ -11,6 +12,7 @@ public class TimeSeriesUtils {
 
     /**
      * Converts a list of prices to multiplicative (log) returns.
+     * 
      * @param prices
      * @return
      */
@@ -36,18 +38,19 @@ public class TimeSeriesUtils {
 
     public static double calculateMean(double[] data) {
         double mean = 0;
-        double temporarySum=0;
+        double temporarySum = 0;
 
-        for (int i=0; i<data.length-1; i++) {
-            temporarySum=+data[i];
+        for (int i = 0; i < data.length - 1; i++) {
+            temporarySum = +data[i];
         }
 
-        mean=temporarySum/data.length;
+        mean = temporarySum / data.length;
         return mean;
     }
 
     public static double calculateStandardDeviation(double[] data) {
         double sd = 0;
+<<<<<<< HEAD
         double sum = 0;
         for (double num : data) {
             sum += num;
@@ -62,6 +65,9 @@ public class TimeSeriesUtils {
 
         sd = Math.sqrt(variance);
         
+=======
+
+>>>>>>> dylan
         return sd;
     }
 
@@ -110,6 +116,13 @@ public class TimeSeriesUtils {
         double[] SMA = { 0, 1 };
 
         return SMA;
+    }
+
+    public static double calculatePercentile(ArrayList<Double> values, double percentile) {
+        ArrayList<Double> sorted = new ArrayList<>(values);
+        Collections.sort(sorted);
+        int index = (int) Math.ceil(percentile / 100.0 * sorted.size()) - 1;
+        return sorted.get(Math.max(index, 0));
     }
 
 }
