@@ -23,7 +23,7 @@ public class StatisticalTests {
         // Step 2: Get residuals ε = series1 - (α + β * series2)
         ArrayList<Double> residuals = new ArrayList<>();
         for (int i = 0; i < series1.size(); i++) {
-            double predicted = regression.alpha + regression.beta * series2.get(i);
+            double predicted = regression.getAlpha() + regression.getAlpha() * series2.get(i);
             residuals.add(series1.get(i) - predicted);
         }
 
@@ -50,7 +50,7 @@ public class StatisticalTests {
         RegressionResult result = OLSUtils.simpleLinearRegression(deltaSeries, laggedSeries);
 
         // Return the t-statistic of beta (this is our ADF statistic)
-        return result.beta / result.seBeta; // This is the t-statistic for beta
+        return result.getBeta() / result.getSeBeta(); // This is the t-statistic for beta
     }
 
     public static ArrayList<Double> getSpread(ArrayList<Double> series1, ArrayList<Double> series2) {
@@ -60,7 +60,7 @@ public class StatisticalTests {
         // Step 2: Calculate the spread for each pair of values
         ArrayList<Double> spread = new ArrayList<>();
         for (int i = 0; i < series1.size(); i++) {
-            double predicted = regression.alpha + regression.beta * series2.get(i);
+            double predicted = regression.getAlpha() + regression.getBeta() * series2.get(i);
             double spreadValue = series1.get(i) - predicted; // Spread is the residuals
             spread.add(spreadValue);
         }

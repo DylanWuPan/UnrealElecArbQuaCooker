@@ -1,37 +1,85 @@
 package quacooker.algorithm.model;
 
-import quacooker.algorithm.strategy.*;
-import quacooker.algorithm.stats.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
+
+import quacooker.algorithm.strategy.PairsTradingSignal;
+import quacooker.algorithm.strategy.PairsTradingStrategy;
+import quacooker.api.HistoricalDataFetcher;
+import quacooker.api.TickerData;
+import quacooker.trading.PairsTrade;
+import quacooker.trading.PairsTradeLedger;
+import quacooker.trading.ShortTrade;
+import quacooker.trading.Trade;
 
 /**
  * Represents a trade: open date, close date, entry/exit z-score, PnL, etc.
  */
 public class PairsTrader {
 
-    private final ArrayList<Double> series1;
-    private final ArrayList<Double> series2;
-    private final PairsTradingStrategy strategy;
+  private final String coin1;
+  private final String coin2;
+  private final PairsTradingStrategy strategy;
+  private final PairsTradeLedger ledger;
 
-    public PairsTrader(ArrayList<Double> series1, ArrayList<Double> series2, PairsTradingStrategy strategy) {
-        this.series1 = series1;
-        this.series2 = series2;
-        this.strategy = strategy;
-    }
+  public PairsTrader(String coin1, String coin2, PairsTradingStrategy strategy) {
+    this.coin1 = coin1;
+    this.coin2 = coin2;
+    this.strategy = strategy;
+    this.ledger = new PairsTradeLedger();
+  }
 
-    public StrategyResult runStrategy() {
-        return strategy.run(series1, series2);
-    }
+  public ArrayList<Double> backtest(int numDays, int lookbackPeriod) {
+    ArrayList<Double> revenueTracker = new ArrayList<>();
+    TickerData coin1Data = HistoricalDataFetcher.fetchPrices(coin1, numDays + lookbackPeriod);
+    TickerData coin2Data = HistoricalDataFetcher.fetchPrices(coin2, numDays + lookbackPeriod);
+    for (int i = 0; i < numDays; i++) {
+      ArrayList<Double> series1 = new ArrayList<>(coin1Data.getPrices().subList(i, i + lookbackPeriod));
+      ArrayList<Double> series2 = new ArrayList<>(coin2Data.getPrices().subList(i, i + lookbackPeriod));
+      PairsTradingSignal signal = strategy.getSignal(series1, series2);
 
-    public ArrayList<Double> getSeries1() {
-        return series1;
+      Trade coin1Trade;
+      Trade coin2Trade;
+      LocalDate tradeDate = LocalDate.now().minusDays(numDays - i);
+      switch (signal.getSignalType()) {
+        case LONG_A_SHORT_B:
+          coin1Trade = new Trade(coin1, Math.abs(signal.getCoin1Units()), series1.get(series1.size() - 1), tradeDate);
+          coin2Trade = new ShortTrade(coin2, Math.abs(signal.getCoin2Units()), series2.get(series2.size() - 1),
+              tradeDate);
+          ledger.add(new PairsTrade(coin1Trade, coin2Trade));
+          break;
+        case SHORT_A_LONG_B:
+          coin1Trade = new ShortTrade(coin1,
+              Math.abs(signal.getCoin1Units()), series1.get(series1.size() - 1), tradeDate);
+          coin2Trade = new Trade(coin2, Math.abs(signal
+              .getCoin2Units()), series2.get(series2.size() - 1),
+              tradeDate);
+          ledger.add(new PairsTrade(coin1Trade, coin2Trade));
+          break;
+        case SELL:
+          ledger.sellUnsoldTrades(series1.get(series1.size() - 1), series2.get(series2.size() - 1));
+          break;
+        default:
+          break;
+      }
+      revenueTracker.add(ledger.getTotalRevenue());
     }
+    return revenueTracker;
+  }
 
-    public ArrayList<Double> getSeries2() {
-        return series2;
-    }
+  public String getCoin1() {
+    return coin1;
+  }
 
-    public PairsTradingStrategy getStrategy() {
-        return strategy;
-    }
+  public String getCoin2() {
+    return coin2;
+  }
+
+  public PairsTradingStrategy getStrategy() {
+    return strategy;
+  }
+
+  public PairsTradeLedger getLedger() {
+    return ledger;
+  }
 }
