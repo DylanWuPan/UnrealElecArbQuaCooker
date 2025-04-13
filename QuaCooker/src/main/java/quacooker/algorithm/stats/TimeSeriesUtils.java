@@ -50,11 +50,10 @@ public class TimeSeriesUtils {
 
     public static double calculateStandardDeviation(double[] data) {
         double sd = 0;
-<<<<<<< HEAD
         double sum = 0;
         for (double num : data) {
             sum += num;
-            }
+        }
         double mean = sum / data.length;
 
         double sumSquaredDifferences = 0;
@@ -64,10 +63,7 @@ public class TimeSeriesUtils {
         double variance = sumSquaredDifferences / data.length;
 
         sd = Math.sqrt(variance);
-        
-=======
 
->>>>>>> dylan
         return sd;
     }
 
@@ -75,11 +71,11 @@ public class TimeSeriesUtils {
         if (series1.length != series2.length || series1.length == 0) {
             throw new IllegalArgumentException("Arrays must be of the same non-zero length");
         }
-    
+
         int n = series1.length;
         double sumX = 0, sumY = 0, sumXY = 0;
         double sumX2 = 0, sumY2 = 0;
-    
+
         for (int i = 0; i < n; i++) {
             sumX += series1[i];
             sumY += series2[i];
@@ -87,14 +83,14 @@ public class TimeSeriesUtils {
             sumX2 += series1[i] * series1[i];
             sumY2 += series2[i] * series2[i];
         }
-    
+
         double numerator = (n * sumXY) - (sumX * sumY);
         double denominator = Math.sqrt((n * sumX2 - sumX * sumX) * (n * sumY2 - sumY * sumY));
-    
+
         if (denominator == 0) {
             return 0; // or throw an exception if undefined
         }
-    
+
         return numerator / denominator;
     }
 
