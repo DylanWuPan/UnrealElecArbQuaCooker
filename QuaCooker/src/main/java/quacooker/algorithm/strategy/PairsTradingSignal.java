@@ -2,8 +2,8 @@ package quacooker.algorithm.strategy;
 
 public class PairsTradingSignal {
   public enum SignalType {
-    LONG_A_SHORT_B,
-    SHORT_A_LONG_B,
+    LONG_1_SHORT_2,
+    SHORT_1_LONG_2,
     SELL,
     HOLD
   };

@@ -17,21 +17,16 @@ public class StatisticalTests {
      * @return
      */
     public static boolean areCointegrated(ArrayList<Double> series1, ArrayList<Double> series2, double criticalValue) {
-        // Step 1: Run OLS regression: series1 = alpha + beta * series2
         RegressionResult regression = OLSUtils.simpleLinearRegression(series1, series2);
 
-        // Step 2: Get residuals ε = series1 - (α + β * series2)
         ArrayList<Double> residuals = new ArrayList<>();
         for (int i = 0; i < series1.size(); i++) {
-            double predicted = regression.getAlpha() + regression.getAlpha() * series2.get(i);
+            double predicted = regression.getAlpha() + regression.getBeta() * series2.get(i);
             residuals.add(series1.get(i) - predicted);
         }
 
-        // Step 3: Perform Augmented Dickey-Fuller (ADF) test on residuals
         double adfStat = adfTestStatistic(residuals);
-        // Return true if the ADF statistic is below the critical value, implying
-        // cointegration
-        return adfStat < criticalValue;
+        return adfStat < criticalValue; // use -2.86 or -3.43 depending on confidence level
     }
 
     // Computes the ADF test statistic for a time series (using the t-statistic of

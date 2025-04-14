@@ -52,9 +52,9 @@ public class MeanReversionStrategy extends PairsTradingStrategy {
         double coin2Units = regressionResult.getCoin2Units(NOTIONAL, series2.get(series2.size() - 1));
 
         if (zScore > dynamicEntry) {
-            return new PairsTradingSignal(PairsTradingSignal.SignalType.SHORT_A_LONG_B, coin1Units, coin2Units);
+            return new PairsTradingSignal(PairsTradingSignal.SignalType.SHORT_1_LONG_2, coin1Units, coin2Units);
         } else if (zScore < -dynamicEntry) {
-            return new PairsTradingSignal(PairsTradingSignal.SignalType.LONG_A_SHORT_B, coin1Units, coin2Units);
+            return new PairsTradingSignal(PairsTradingSignal.SignalType.LONG_1_SHORT_2, coin1Units, coin2Units);
         } else if (Math.abs(zScore) < dynamicExit) {
             return new PairsTradingSignal(PairsTradingSignal.SignalType.SELL);
         } else {

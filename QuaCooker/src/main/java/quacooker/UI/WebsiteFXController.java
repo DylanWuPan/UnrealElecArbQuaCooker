@@ -18,6 +18,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import quacooker.algorithm.model.PairsTrader;
+import quacooker.algorithm.stats.Constants;
 import quacooker.algorithm.stats.StatisticalTests;
 import quacooker.algorithm.strategy.MeanReversionStrategy;
 import quacooker.algorithm.visualization.TickerDataGrapher;
@@ -82,7 +83,8 @@ public class WebsiteFXController {
       LineChart<Number, Number> coin2PricesChart = TickerDataGrapher.graphPrices(coin2Data, "blue");
 
       ArrayList<Double> spread = null;
-      boolean cointegrated = StatisticalTests.areCointegrated(coin1Data.getPrices(), coin2Data.getPrices(), -2.86);
+      boolean cointegrated = StatisticalTests.areCointegrated(coin1Data.getPrices(), coin2Data.getPrices(),
+          Constants.CRITICAL_VALUE);
       if (cointegrated) {
         spread = StatisticalTests.getSpread(coin1Data.getPrices(), coin2Data.getPrices());
       }
@@ -148,9 +150,16 @@ public class WebsiteFXController {
       return;
     }
 
+    long numDays = ChronoUnit.DAYS.between(startDate, LocalDate.now());
+    if (!StatisticalTests.areCointegrated(
+        HistoricalDataFetcher.fetchPrices(coin1, (int) numDays + bufferDays).getPrices(),
+        HistoricalDataFetcher.fetchPrices(coin2, (int) numDays + bufferDays).getPrices(), Constants.CRITICAL_VALUE)) {
+      pairsTraderResultLabel.setText("Coins are not cointegrated.");
+      return;
+    }
+
     PairsTrader trader = new PairsTrader(coin1, coin2,
         new MeanReversionStrategy(notional));
-    long numDays = ChronoUnit.DAYS.between(startDate, LocalDate.now());
     ArrayList<Double> results = trader.backtest((int) numDays, bufferDays);
     LineChart<Number, Number> resultsChart = graphResults(results, "green");
 

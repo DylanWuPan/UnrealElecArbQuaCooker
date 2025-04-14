@@ -42,25 +42,23 @@ public class PairsTrader {
       Trade coin2Trade;
       LocalDate tradeDate = LocalDate.now().minusDays(numDays - i);
       switch (signal.getSignalType()) {
-        case LONG_A_SHORT_B:
+        case LONG_1_SHORT_2 -> {
           coin1Trade = new Trade(coin1, Math.abs(signal.getCoin1Units()), series1.get(series1.size() - 1), tradeDate);
           coin2Trade = new ShortTrade(coin2, Math.abs(signal.getCoin2Units()), series2.get(series2.size() - 1),
               tradeDate);
           ledger.add(new PairsTrade(coin1Trade, coin2Trade));
-          break;
-        case SHORT_A_LONG_B:
-          coin1Trade = new ShortTrade(coin1,
-              Math.abs(signal.getCoin1Units()), series1.get(series1.size() - 1), tradeDate);
-          coin2Trade = new Trade(coin2, Math.abs(signal
-              .getCoin2Units()), series2.get(series2.size() - 1),
+        }
+        case SHORT_1_LONG_2 -> {
+          coin1Trade = new ShortTrade(coin1, Math.abs(signal.getCoin1Units()), series1.get(series1.size() - 1),
               tradeDate);
+          coin2Trade = new Trade(coin2, Math.abs(signal.getCoin2Units()), series2.get(series2.size() - 1), tradeDate);
           ledger.add(new PairsTrade(coin1Trade, coin2Trade));
-          break;
-        case SELL:
+        }
+        case SELL -> {
           ledger.sellUnsoldTrades(series1.get(series1.size() - 1), series2.get(series2.size() - 1));
-          break;
-        default:
-          break;
+        }
+        default -> {
+        }
       }
       revenueTracker.add(ledger.getTotalRevenue());
     }
