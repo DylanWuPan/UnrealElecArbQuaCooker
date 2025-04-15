@@ -6,7 +6,6 @@ public class PairsTrade {
   private final Trade coin1Trade;
   private final Trade coin2Trade;
   private boolean isSold;
-  private double revenue;
   private LocalDate sellingDate;
 
   public PairsTrade(Trade coin1Trade, Trade coin2Trade) {
@@ -32,19 +31,12 @@ public class PairsTrade {
     coin2Trade.sell(coin2Price, sellingDate);
     if (!isSold) {
       this.sellingDate = sellingDate;
-      this.revenue = calculateRevenue();
       isSold = true;
     }
   }
 
-  private double calculateRevenue() {
-    double coin1Revenue = coin1Trade.isSold() ? coin1Trade.getRevenue() : 0;
-    double coin2Revenue = coin2Trade.isSold() ? coin2Trade.getRevenue() : 0;
-    return coin1Revenue + coin2Revenue;
-  }
-
-  public double getRevenue() {
-    return revenue;
+  public double calculateValue() {
+    return coin1Trade.calculateValue() + coin2Trade.calculateValue();
   }
 
   public LocalDate getSellingDate() {

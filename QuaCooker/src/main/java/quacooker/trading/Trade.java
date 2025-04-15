@@ -45,13 +45,17 @@ public class Trade {
     this.sellingPrice = sellingPrice;
     this.sellingDate = sellingDate;
     if (!isSold) {
-      this.revenue = calculateRevenue();
+      this.revenue = calculateValue();
       isSold = true;
     }
   }
 
-  protected double calculateRevenue() {
-    return (sellingPrice - purchasePrice) * shares;
+  public double calculateValue() {
+    if (isSold) {
+      return (sellingPrice - purchasePrice) * shares;
+    } else {
+      return -(purchasePrice * shares);
+    }
   }
 
   public double getSellingPrice() {
@@ -60,9 +64,5 @@ public class Trade {
 
   public LocalDate getSellingDate() {
     return sellingDate;
-  }
-
-  public double getRevenue() {
-    return revenue;
   }
 }

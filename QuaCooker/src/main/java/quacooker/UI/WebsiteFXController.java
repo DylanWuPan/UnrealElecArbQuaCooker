@@ -1,7 +1,5 @@
 package quacooker.UI;
 
-import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 
 import javafx.application.Platform;
@@ -10,7 +8,7 @@ import javafx.fxml.FXML;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
-import javafx.scene.control.DatePicker;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
@@ -27,6 +25,7 @@ import quacooker.api.TickerData;
 import quacooker.trading.PairsTradeLedger;
 
 public class WebsiteFXController {
+
   @FXML
   private TextField cointegration_coin1;
   @FXML
@@ -43,13 +42,15 @@ public class WebsiteFXController {
   @FXML
   private TextField pairsTrader_coin2;
   @FXML
-  private DatePicker pairsTrader_startDate;
+  private ComboBox<String> pairsTrader_periodSelector;
   @FXML
   private Spinner<Integer> pairsTrader_bufferDays;
   @FXML
   private Label pairsTraderResultLabel;
   @FXML
   private TextField pairsTrader_notional;
+  @FXML
+  private TextField pairsTrader_initialInvestment;
   @FXML
   private StackPane pairsTraderGraphContainer;
 
@@ -64,48 +65,41 @@ public class WebsiteFXController {
     pairsTrader_bufferDays.setEditable(true);
     pairsTrader_coin1.setText("bitcoin");
     pairsTrader_coin2.setText("ethereum");
-    pairsTrader_startDate.setValue(LocalDate.now());
-    pairsTrader_startDate.setEditable(false);
+    pairsTrader_periodSelector.setValue("6 months");
+    pairsTrader_periodSelector.setEditable(false);
     pairsTrader_notional.setText("1000");
+    pairsTrader_initialInvestment.setText("1000000");
   }
 
   @FXML
   public void handleRunCointegrationTest(ActionEvent event) {
-    String coin1 = cointegration_coin1.getText();
-    String coin2 = cointegration_coin2.getText();
+    String coin1 = cointegration_coin1.getText().trim();
+    String coin2 = cointegration_coin2.getText().trim();
     int days = cointegration_days.getValue();
 
     try {
       TickerData coin1Data = HistoricalDataFetcher.fetchPrices(coin1, days);
       TickerData coin2Data = HistoricalDataFetcher.fetchPrices(coin2, days);
 
-      LineChart<Number, Number> coin1PricesChart = TickerDataGrapher.graphPrices(coin1Data, "red");
-      LineChart<Number, Number> coin2PricesChart = TickerDataGrapher.graphPrices(coin2Data, "blue");
+      LineChart<Number, Number> coin1Chart = TickerDataGrapher.graphPrices(coin1Data, "red");
+      LineChart<Number, Number> coin2Chart = TickerDataGrapher.graphPrices(coin2Data, "blue");
 
-      ArrayList<Double> spread = null;
-      boolean cointegrated = StatisticalTests.areCointegrated(coin1Data.getPrices(), coin2Data.getPrices(),
-          Constants.CRITICAL_VALUE);
-      if (cointegrated) {
-        spread = StatisticalTests.getSpread(coin1Data.getPrices(), coin2Data.getPrices());
-      }
+      boolean cointegrated = StatisticalTests.areCointegrated(
+          coin1Data.getPrices(), coin2Data.getPrices(), Constants.CRITICAL_VALUE);
 
-      final ArrayList<Double> finalSpread = spread;
+      ArrayList<Double> spread = cointegrated
+          ? StatisticalTests.getSpread(coin1Data.getPrices(), coin2Data.getPrices())
+          : null;
 
       Platform.runLater(() -> {
-        StackPane coin1Wrapper = new StackPane(coin1PricesChart);
-        StackPane coin2Wrapper = new StackPane(coin2PricesChart);
-        coin1Wrapper.setPrefSize(750, 500);
-        coin2Wrapper.setPrefSize(750, 500);
-        coin1Wrapper.setStyle("-fx-border-color: lightgray; -fx-border-width: 1;");
-        coin2Wrapper.setStyle("-fx-border-color: lightgray; -fx-border-width: 1;");
-
         VBox graphContainer = new VBox(10);
-        graphContainer.getChildren().addAll(coin1Wrapper, coin2Wrapper);
+        graphContainer.getChildren().addAll(
+            wrapChart(coin1Chart),
+            wrapChart(coin2Chart));
 
-        if (cointegrated && finalSpread != null) {
+        if (cointegrated && spread != null) {
+          graphContainer.getChildren().add(createSpreadChart(spread));
           cointegrationResultLabel.setText("The series are cointegrated. Spread chart below.");
-
-          graphContainer.getChildren().add(createSpreadChart(finalSpread));
         } else {
           cointegrationResultLabel.setText("The series are not cointegrated.");
         }
@@ -114,29 +108,30 @@ public class WebsiteFXController {
       });
 
     } catch (Exception e) {
+      e.printStackTrace();
       Platform.runLater(() -> {
         cointegrationGraphContainer.getChildren()
             .setAll(new Label("Failed to load cointegration data: " + e.getMessage()));
       });
-      e.printStackTrace();
     }
   }
 
   @FXML
   public void handleRunPairsTrader(ActionEvent event) {
-    String coin1 = pairsTrader_coin1.getText();
-    String coin2 = pairsTrader_coin2.getText();
-    LocalDate startDate = pairsTrader_startDate.getValue();
+    String coin1 = pairsTrader_coin1.getText().trim();
+    String coin2 = pairsTrader_coin2.getText().trim();
+    String period = pairsTrader_periodSelector.getValue();
     int bufferDays = pairsTrader_bufferDays.getValue();
-    double notional = Double.parseDouble(pairsTrader_notional.getText());
-    if (notional <= 0) {
-      pairsTraderResultLabel.setText("Notional must be greater than 0.");
+    double initialInvestment = Double.parseDouble(pairsTrader_initialInvestment.getText().trim());
+
+    double notional;
+    try {
+      notional = Double.parseDouble(pairsTrader_notional.getText().trim());
+    } catch (NumberFormatException e) {
+      pairsTraderResultLabel.setText("Invalid notional amount.");
       return;
     }
-    if (startDate == null) {
-      pairsTraderResultLabel.setText("Start date is required.");
-      return;
-    }
+
     if (coin1.isEmpty() || coin2.isEmpty()) {
       pairsTraderResultLabel.setText("Both coins are required.");
       return;
@@ -145,107 +140,114 @@ public class WebsiteFXController {
       pairsTraderResultLabel.setText("Coins must be different.");
       return;
     }
+    if (notional <= 0) {
+      pairsTraderResultLabel.setText("Notional must be greater than 0.");
+      return;
+    }
     if (bufferDays <= 0) {
       pairsTraderResultLabel.setText("Buffer days must be greater than 0.");
       return;
     }
-
-    long numDays = ChronoUnit.DAYS.between(startDate, LocalDate.now());
-    if (!StatisticalTests.areCointegrated(
-        HistoricalDataFetcher.fetchPrices(coin1, (int) numDays + bufferDays).getPrices(),
-        HistoricalDataFetcher.fetchPrices(coin2, (int) numDays + bufferDays).getPrices(), Constants.CRITICAL_VALUE)) {
-      pairsTraderResultLabel.setText("Coins are not cointegrated.");
+    if (initialInvestment <= 0) {
+      pairsTraderResultLabel.setText("Initial investment must be greater than 0.");
       return;
     }
 
-    PairsTrader trader = new PairsTrader(coin1, coin2,
-        new MeanReversionStrategy(notional));
-    ArrayList<Double> results = trader.backtest((int) numDays, bufferDays);
-    LineChart<Number, Number> resultsChart = graphResults(results, "green");
+    int numDays = switch (period) {
+      case "1 month" -> 30;
+      case "3 months" -> 90;
+      case "6 months" -> 180;
+      case "9 months" -> 270;
+      case "11 months" -> 330;
+      default -> 90;
+    };
 
-    Platform.runLater(() -> {
-      StackPane resultsPane = new StackPane(resultsChart);
-      resultsPane.setPrefSize(750, 500);
-      resultsPane.setStyle("-fx-border-color: lightgray; -fx-border-width: 1;");
+    int totalDays = numDays + bufferDays;
 
-      VBox graphContainer = new VBox(10);
-      graphContainer.getChildren().addAll(resultsPane);
-      pairsTraderGraphContainer.getChildren().setAll(graphContainer);
-    });
+    try {
+      ArrayList<Double> coin1Data = HistoricalDataFetcher.fetchPrices(coin1, totalDays).getPrices();
+      ArrayList<Double> coin2Data = HistoricalDataFetcher.fetchPrices(coin2, totalDays).getPrices();
 
-    PairsTradeLedger ledger = trader.getLedger();
-    System.out.println("Total Revenue: " + ledger.getTotalRevenue());
-    System.out.println("Unsold Trades: " + ledger.getUnsoldTrades().size());
-    System.out.println("Total Trades: " + ledger.size());
-    pairsTraderResultLabel.setText("Running Pairs Trader...");
+      ArrayList<Double> coin1Buffer = new ArrayList<>(coin1Data.subList(0, bufferDays));
+      ArrayList<Double> coin2Buffer = new ArrayList<>(coin2Data.subList(0, bufferDays));
+
+      if (!StatisticalTests.areCointegrated(coin1Buffer, coin2Buffer, Constants.CRITICAL_VALUE)) {
+        pairsTraderResultLabel.setText("Coins are not cointegrated.");
+        return;
+      }
+
+      PairsTrader trader = new PairsTrader(coin1, coin2, new MeanReversionStrategy(notional));
+      ArrayList<Double> results = trader.backtest(numDays, bufferDays, initialInvestment);
+
+      LineChart<Number, Number> resultsChart = graphResults(results, "green");
+
+      Platform.runLater(() -> {
+        VBox container = new VBox(10, wrapChart(resultsChart));
+        pairsTraderGraphContainer.getChildren().setAll(container);
+        pairsTraderResultLabel.setText("Pairs Trader run completed.");
+      });
+
+      PairsTradeLedger ledger = trader.getLedger();
+      System.out.println("Total Revenue: " + ledger.getTotalRevenue());
+      System.out.println("Unsold Trades: " + ledger.getUnsoldTrades().size());
+      System.out.println("Total Trades: " + ledger.size());
+
+    } catch (Exception e) {
+      e.printStackTrace();
+      Platform.runLater(() -> pairsTraderResultLabel.setText("Failed to run trader: " + e.getMessage()));
+    }
   }
 
   private static LineChart<Number, Number> createSpreadChart(ArrayList<Double> spread) {
-    NumberAxis xAxis = new NumberAxis();
+    NumberAxis xAxis = new NumberAxis("Time Index", 0, spread.size(), spread.size() / 10);
     NumberAxis yAxis = new NumberAxis();
-    xAxis.setLabel("Time Index");
     yAxis.setLabel("Spread");
 
-    double minSpread = Double.MAX_VALUE;
-    double maxSpread = Double.MIN_VALUE;
+    double min = spread.stream().min(Double::compare).orElse(0.0);
+    double max = spread.stream().max(Double::compare).orElse(0.0);
+    double pad = (max - min) * 0.1;
+    yAxis.setLowerBound(min - pad);
+    yAxis.setUpperBound(max + pad);
 
-    for (Double spreadValue : spread) {
-      if (spreadValue < minSpread)
-        minSpread = spreadValue;
-      if (spreadValue > maxSpread)
-        maxSpread = spreadValue;
-    }
+    LineChart<Number, Number> chart = new LineChart<>(xAxis, yAxis);
+    chart.setTitle("Spread");
+    chart.setCreateSymbols(false);
 
-    double padding = (maxSpread - minSpread) * 0.1; // 10% padding
-    yAxis.setLowerBound(minSpread - padding);
-    yAxis.setUpperBound(maxSpread + padding);
-
-    LineChart<Number, Number> spreadChart = new LineChart<>(xAxis, yAxis);
-    spreadChart.setTitle("Spread");
-    XYChart.Series<Number, Number> spreadSeries = new XYChart.Series<>();
-    spreadSeries.setName("Spread");
-
+    XYChart.Series<Number, Number> series = new XYChart.Series<>();
     for (int i = 0; i < spread.size(); i++) {
-      spreadSeries.getData().add(new XYChart.Data<>(i, spread.get(i)));
+      series.getData().add(new XYChart.Data<>(i, spread.get(i)));
     }
-
-    spreadChart.getData().add(spreadSeries);
-    spreadChart.setPrefSize(750, 300);
-    spreadChart.setCreateSymbols(false);
-
-    return spreadChart;
+    chart.getData().add(series);
+    chart.setPrefSize(750, 300);
+    return chart;
   }
 
   public static LineChart<Number, Number> graphResults(ArrayList<Double> results, String color) {
-    NumberAxis xAxis = new NumberAxis();
-    NumberAxis yAxis = new NumberAxis();
-    yAxis.setLabel("Revenue ($)");
-    xAxis.setLabel("Time (days)");
-
-    yAxis.setAutoRanging(true);
+    NumberAxis xAxis = new NumberAxis("Time (days)", 0, results.size(), results.size() / 10);
+    NumberAxis yAxis = new NumberAxis("Revenue ($)", 0, 0, 0); // Auto-ranged below
     xAxis.setAutoRanging(true);
-    yAxis.setForceZeroInRange(false);
-    xAxis.setForceZeroInRange(false);
+    yAxis.setAutoRanging(true);
 
     LineChart<Number, Number> chart = new LineChart<>(xAxis, yAxis);
-
     chart.setTitle("Pairs Trading Results");
+    chart.setCreateSymbols(false);
+    chart.setLegendVisible(true);
+    chart.setAnimated(false);
 
     XYChart.Series<Number, Number> series = new XYChart.Series<>();
-    series.setName("Pairs Trading Results");
-
     for (int i = 0; i < results.size(); i++) {
       series.getData().add(new XYChart.Data<>(i, results.get(i)));
     }
-
     chart.getData().add(series);
-
     series.getNode().setStyle("-fx-stroke: " + color + ";");
 
-    chart.setLegendVisible(true);
-    chart.setCreateSymbols(false);
-    chart.setAnimated(false);
-
     return chart;
+  }
+
+  private StackPane wrapChart(LineChart<Number, Number> chart) {
+    StackPane wrapper = new StackPane(chart);
+    wrapper.setPrefSize(750, 500);
+    wrapper.setStyle("-fx-border-color: lightgray; -fx-border-width: 1;");
+    return wrapper;
   }
 }

@@ -11,7 +11,7 @@ public class PairsTradeLedger extends ArrayList<PairsTrade> {
   public double getTotalRevenue() {
     double totalRevenue = 0;
     for (PairsTrade trade : this) {
-      totalRevenue += trade.getRevenue();
+      totalRevenue += trade.calculateValue();
     }
     return totalRevenue;
   }

@@ -1,5 +1,5 @@
 package quacooker.algorithm.stats;
 
 public class Constants {
-  public static final double CRITICAL_VALUE = -2.86;
+  public static final double CRITICAL_VALUE = -2.57;
 }

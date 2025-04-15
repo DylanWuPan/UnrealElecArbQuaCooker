@@ -2,10 +2,9 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.control.TabPane?>
-<?import javafx.scene.control.Tab?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.control.Spinner?>
+<?import javafx.collections.FXCollections?>
+<?import java.lang.String?>
+
 
 <TabPane fx:id="mainTabPane" xmlns:fx="http://javafx.com/fxml" fx:controller="quacooker.UI.WebsiteFXController" styleClass="main-tab-pane">
     <tabs>
@@ -52,8 +51,18 @@
                     </HBox>
 
                     <HBox spacing="10" alignment="CENTER_LEFT">
-                        <Label text="Start Date:" styleClass="input-label"/>
-                        <DatePicker fx:id="pairsTrader_startDate" styleClass="date-picker"/>
+                        <Label text="Start Period:" styleClass="input-label"/>
+                        <ComboBox fx:id="pairsTrader_periodSelector" styleClass="period-selector">
+                            <items>
+                                <FXCollections fx:factory="observableArrayList">
+                                    <String fx:value="1 month" />
+                                    <String fx:value="3 months" />
+                                    <String fx:value="6 months" />
+                                    <String fx:value="9 months" />
+                                    <String fx:value="11 months" />
+                                </FXCollections>
+                            </items>
+                        </ComboBox>
                     </HBox>
 
                     <HBox spacing="10" alignment="CENTER_LEFT">
@@ -66,6 +75,11 @@
                         <TextField fx:id="pairsTrader_notional" promptText="e.g., 10000" styleClass="notional-input"/>
                     </HBox>
 
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <Label text="Initial Investment:" styleClass="input-label"/>
+                        <TextField fx:id="pairsTrader_initialInvestment" promptText="e.g., 100000" styleClass="initialInvestment-input"/>
+                    </HBox>
+
                     <Button text="Run Pairs Trader" fx:id="runPairsTraderButton" onAction="#handleRunPairsTrader" styleClass="run-button"/>
                 </VBox>
 
@@ -74,5 +88,4 @@
             </VBox>
         </Tab>
     </tabs>
-
 </TabPane>
