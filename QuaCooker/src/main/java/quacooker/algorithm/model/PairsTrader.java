@@ -31,6 +31,7 @@ public class PairsTrader {
 
   public ArrayList<Double> backtest(int numDays, int lookbackPeriod, double initialInvestment) {
     ArrayList<Double> revenueTracker = new ArrayList<>();
+    revenueTracker.add(initialInvestment);
     TickerData coin1Data = HistoricalDataFetcher.fetchPrices(coin1, numDays + lookbackPeriod);
     TickerData coin2Data = HistoricalDataFetcher.fetchPrices(coin2, numDays + lookbackPeriod);
     for (int i = 0; i < numDays; i++) {
@@ -60,11 +61,11 @@ public class PairsTrader {
         default -> {
         }
       }
-      revenueTracker.add(ledger.getTotalRevenue());
+      revenueTracker.add(initialInvestment + ledger.getTotalRevenue());
     }
     ledger.sellUnsoldTrades(coin1Data.getPrices().get(coin1Data.getPrices().size() - 1),
         coin2Data.getPrices().get(coin2Data.getPrices().size() - 1));
-    revenueTracker.add(ledger.getTotalRevenue());
+    revenueTracker.add(initialInvestment + ledger.getTotalRevenue());
     return revenueTracker;
   }
 

@@ -54,7 +54,6 @@
 /* ========== Result Label ========== */
 .result-label {
   -fx-text-fill: #ffffff;
-  -fx-font-style: bold;
   -fx-padding: 5 0 0 0;
 }
 

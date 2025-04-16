@@ -1,6 +1,7 @@
 package quacooker.UI;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -63,11 +64,11 @@ public class WebsiteFXController {
 
     pairsTrader_bufferDays.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 365, 30));
     pairsTrader_bufferDays.setEditable(true);
-    pairsTrader_coin1.setText("bitcoin");
+    pairsTrader_coin1.setText("ethereum-classic");
     pairsTrader_coin2.setText("ethereum");
-    pairsTrader_periodSelector.setValue("6 months");
+    pairsTrader_periodSelector.setValue("9 months");
     pairsTrader_periodSelector.setEditable(false);
-    pairsTrader_notional.setText("1000");
+    pairsTrader_notional.setText("10000");
     pairsTrader_initialInvestment.setText("1000000");
   }
 
@@ -102,6 +103,7 @@ public class WebsiteFXController {
           cointegrationResultLabel.setText("The series are cointegrated. Spread chart below.");
         } else {
           cointegrationResultLabel.setText("The series are not cointegrated.");
+          graphContainer.getChildren().clear();
         }
 
         cointegrationGraphContainer.getChildren().setAll(graphContainer);
@@ -223,10 +225,33 @@ public class WebsiteFXController {
   }
 
   public static LineChart<Number, Number> graphResults(ArrayList<Double> results, String color) {
-    NumberAxis xAxis = new NumberAxis("Time (days)", 0, results.size(), results.size() / 10);
-    NumberAxis yAxis = new NumberAxis("Revenue ($)", 0, 0, 0); // Auto-ranged below
+    NumberAxis xAxis = new NumberAxis();
+    xAxis.setLabel("Time (days)");
     xAxis.setAutoRanging(true);
-    yAxis.setAutoRanging(true);
+
+    NumberAxis yAxis = new NumberAxis();
+    yAxis.setLabel("Revenue ($)");
+    yAxis.setAutoRanging(false);
+
+    double minY = Collections.min(results);
+    double maxY = Collections.max(results);
+    double range = maxY - minY;
+    double padding = range * 0.05;
+    if (padding == 0)
+      padding = maxY * 0.05;
+
+    double lowerBound = minY - padding;
+    double upperBound = maxY + padding;
+
+    // Calculate rounded tick unit
+    double rawTickUnit = range / 10;
+    double exponent = Math.floor(Math.log10(rawTickUnit));
+    double magnitude = Math.pow(10, exponent);
+    double tickUnit = Math.ceil(rawTickUnit / magnitude) * magnitude;
+
+    yAxis.setLowerBound(Math.floor(lowerBound / tickUnit) * tickUnit);
+    yAxis.setUpperBound(Math.ceil(upperBound / tickUnit) * tickUnit);
+    yAxis.setTickUnit(tickUnit);
 
     LineChart<Number, Number> chart = new LineChart<>(xAxis, yAxis);
     chart.setTitle("Pairs Trading Results");
@@ -239,7 +264,13 @@ public class WebsiteFXController {
       series.getData().add(new XYChart.Data<>(i, results.get(i)));
     }
     chart.getData().add(series);
-    series.getNode().setStyle("-fx-stroke: " + color + ";");
+
+    // Apply stroke color
+    series.nodeProperty().addListener((obs, oldNode, newNode) -> {
+      if (newNode != null) {
+        newNode.setStyle("-fx-stroke: " + color + ";");
+      }
+    });
 
     return chart;
   }
