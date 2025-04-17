@@ -2,6 +2,7 @@ package quacooker.algorithm.visualization;
 
 import java.util.ArrayList;
 
+import javafx.geometry.Insets;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
@@ -40,15 +41,21 @@ public class TickerDataGrapher {
   }
 
   public static LineChart<Number, Number> graphPrices(TickerData tickerData, String color) {
+    // Create x-axis but hide it
     NumberAxis xAxis = new NumberAxis();
+    xAxis.setTickLabelsVisible(false);
+    xAxis.setTickMarkVisible(false);
+    xAxis.setMinorTickVisible(false);
+    xAxis.setVisible(false);
+    xAxis.setAutoRanging(true);
+    xAxis.setForceZeroInRange(false);
+    xAxis.setVisible(false);
+
+    // Configure y-axis
     NumberAxis yAxis = new NumberAxis();
     yAxis.setLabel("Price ($)");
-    xAxis.setLabel("Time (ms)");
-
     yAxis.setAutoRanging(true);
-    xAxis.setAutoRanging(true);
     yAxis.setForceZeroInRange(false);
-    xAxis.setForceZeroInRange(false);
 
     LineChart<Number, Number> chart = new LineChart<>(xAxis, yAxis);
 
@@ -67,9 +74,13 @@ public class TickerDataGrapher {
 
     series.getNode().setStyle("-fx-stroke: " + color + ";");
 
-    chart.setLegendVisible(true);
+    chart.setLegendVisible(false);
     chart.setCreateSymbols(false);
     chart.setAnimated(false);
+    chart.setVerticalGridLinesVisible(false);
+
+    // Hide x-axis area
+    chart.setPadding(new Insets(10, 10, 0, 10));
 
     return chart;
   }

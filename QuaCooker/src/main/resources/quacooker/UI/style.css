@@ -2,12 +2,23 @@
 .root {
   -fx-font-family: "Segoe UI", sans-serif;
   -fx-font-size: 14px;
+  -fx-background-color: #000000;
 }
 
-/* ========== Tab Pane ========== */
-.tab-pane {
-  -fx-tab-min-width: 150px;
-  -fx-background-color: #000000;
+/* ========== Dark Theme for All Text Elements ========== */
+.label,
+.button,
+.spinner .text-field,
+.combo-box .text-field,
+.text-field {
+  -fx-text-fill: #ffffff;
+}
+
+/* ========== Labels ========== */
+.input-label {
+  -fx-font-size: 16px;
+  -fx-text-fill: #dddddd;
+  -fx-min-width: 160px;
 }
 
 /* ========== Section Titles ========== */
@@ -18,42 +29,118 @@
   -fx-padding: 0 0 10 0;
 }
 
-/* ========== Labels ========== */
-.input-label {
-  -fx-font-size: 16px;
-  -fx-text-fill: #ffffff;
-  -fx-min-width: 160px;
-}
-
 /* ========== Inputs ========== */
 .text-field,
 .combo-box,
 .spinner,
-.date-picker {
+.date-picker,
+.period-selector {
   -fx-pref-width: 200px;
   -fx-padding: 6 8;
-  -fx-background-radius: 5;
-  -fx-border-radius: 5;
+  -fx-background-color: #1f1f1f;
+  -fx-background-radius: 10;
+  -fx-border-radius: 10;
+  -fx-border-color: #333333;
+  -fx-border-width: 1;
+  -fx-text-fill: #ffffff;
+  -fx-font-size: 14px;
+  -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.25), 5, 0.2, 0, 2);
+}
+
+/* Focused Effect for Inputs */
+.text-field:focused,
+.combo-box:focused,
+.spinner:focused,
+.date-picker:focused,
+.period-selector:focused {
+  -fx-border-color: #3b82f6;
+  -fx-effect: dropshadow(gaussian, rgba(59, 130, 246, 0.4), 8, 0.1, 0, 2);
+}
+
+/* Hover Effects for Inputs */
+.text-field:hover,
+.combo-box:hover,
+.spinner:hover,
+.date-picker:hover,
+.period-selector:hover {
+  -fx-background-color: #2a2a2a;
+  -fx-border-color: #3b3b3b;
+}
+
+/* ========== ComboBox Fix for Gray Text After Selection ========== */
+.combo-box .list-cell {
+  -fx-text-fill: white;
+  -fx-background-color: transparent;
+}
+
+/* When not editable, selected item uses list-cell too */
+.combo-box .label {
+  -fx-text-fill: white;
+}
+
+/* ComboBox Dropdown List Styling */
+.combo-box-popup .list-view {
+  -fx-background-color: #2c2c2c;
+  -fx-border-color: #444;
+  -fx-background-radius: 8;
+  -fx-border-radius: 8;
+}
+
+.combo-box-popup .list-cell {
+  -fx-text-fill: white;
+  -fx-background-color: transparent;
+  -fx-font-size: 14px;
+  -fx-padding: 6 10;
+}
+
+.combo-box-popup .list-cell:hover {
+  -fx-background-color: #3d3d3d;
+}
+
+/* Arrow Styling */
+.combo-box-base .arrow-button {
+  -fx-background-color: transparent;
+}
+
+.combo-box-base .arrow {
+  -fx-background-color: white;
+}
+
+/* Spinner Arrow Buttons */
+.spinner .increment-arrow-button,
+.spinner .decrement-arrow-button {
+  -fx-background-color: #1f1f1f;
+}
+
+/* ========== DatePicker Popup Calendar ========== */
+.date-picker-popup {
+  -fx-background-color: #1f1f1f;
+}
+.date-cell,
+.calendar-grid {
+  -fx-text-fill: #ffffff;
 }
 
 /* ========== Buttons ========== */
 .run-button {
-  -fx-background-color: #1800a0;
+  -fx-background-color: #3b82f6;
   -fx-text-fill: white;
   -fx-padding: 8 14;
   -fx-font-weight: bold;
   -fx-cursor: hand;
-  -fx-background-radius: 5;
-  -fx-border-radius: 5;
+  -fx-background-radius: 10;
+  -fx-border-radius: 10;
 }
 
 .run-button:hover {
-  -fx-background-color: #45a049;
+  -fx-background-color: #2563eb;
 }
 
 /* ========== Result Label ========== */
 .result-label {
-  -fx-text-fill: #ffffff;
+  -fx-font-size: 16px;
+  -fx-text-fill: #cccccc;
+  -fx-alignment: center;
   -fx-padding: 5 0 0 0;
 }
 
@@ -61,26 +148,99 @@
 .pairs-trader-pane,
 .cointegration-testing-pane {
   -fx-padding: 20;
-  -fx-background-color: #2a3034;
+  -fx-background-color: #000000;
   -fx-spacing: 15;
 }
 
 .form-section {
   -fx-spacing: 15;
-}
-
-.graph-container {
-  -fx-border-color: #070707;
+  -fx-background-color: #1b1b1b;
+  -fx-background-radius: 12;
+  -fx-border-radius: 12;
+  -fx-padding: 15;
+  -fx-border-color: #2e2e2e;
   -fx-border-width: 1;
-  -fx-background-color: #ffffff;
-  -fx-padding: 10;
+  -fx-max-width: 500px;
 }
 
-/* ========== Utility ========== */
+/* ========== Graph Container ========== */
+.graph-container {
+  -fx-border-color: #2e2e2e;
+  -fx-border-width: 1;
+  -fx-background-color: #1a1a1a;
+  -fx-padding: 10;
+  -fx-background-radius: 12;
+  -fx-border-radius: 12;
+}
+
+/* ========== Utility Boxes ========== */
 .form-box {
-  -fx-background-color: #ad7373;
+  -fx-background-color: #1e1e1e;
   -fx-padding: 20;
   -fx-border-radius: 10;
-  -fx-border-color: #2d2c32;
+  -fx-background-radius: 10;
+  -fx-border-color: #333333;
   -fx-border-width: 1;
+}
+
+.results-container {
+  -fx-background-color: #1e1e1e;
+  -fx-padding: 15;
+  -fx-spacing: 15;
+  -fx-border-color: #333333;
+  -fx-border-width: 1;
+  -fx-border-radius: 10;
+  -fx-background-radius: 10;
+  -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.25), 10, 0, 0, 4);
+  -fx-alignment: center;
+  -fx-max-width: 500px;
+  -fx-max-height: 150px;
+}
+
+.results-title {
+  -fx-font-size: 20px;
+  -fx-font-weight: bold;
+  -fx-text-fill: #ffffff;
+  -fx-alignment: center;
+}
+
+/* ========== Tab Pane Fixes ========== */
+.tab-pane {
+  -fx-tab-min-width: 150px;
+  -fx-background-color: #000000;
+  -fx-background-insets: 0;
+  -fx-padding: 0;
+  -fx-border-color: transparent;
+}
+
+.tab-header-area {
+  -fx-background-color: #000000;
+}
+
+.tab {
+  -fx-background-color: #272626;
+  -fx-background-radius: 10 10 0 0;
+  -fx-border-radius: 10 10 0 0;
+  -fx-padding: 8 16;
+  -fx-focus-color: transparent;
+  -fx-faint-focus-color: transparent;
+}
+
+.tab-content-area,
+.tab-pane .tab-content {
+  -fx-background-color: #000000;
+}
+
+.tab .tab-label {
+  -fx-text-fill: #ffffff;
+}
+
+.tab:selected {
+  -fx-background-color: #000000;
+  -fx-focus-color: transparent;
+  -fx-faint-focus-color: transparent;
+}
+
+.tab:selected .tab-label {
+  -fx-text-fill: #ffffff;
 }

@@ -5,25 +5,24 @@
 <?import javafx.collections.FXCollections?>
 <?import java.lang.String?>
 
-
 <TabPane fx:id="mainTabPane" xmlns:fx="http://javafx.com/fxml" fx:controller="quacooker.UI.WebsiteFXController" styleClass="main-tab-pane">
     <tabs>
-        <Tab text="Cointegration Testing" closable="false" styleClass="cointegration-testing-tab">
-            <VBox fx:id="cointegrationTestingPane" spacing="20" styleClass="cointegration-testing-pane" alignment="TOP_LEFT">
-                <VBox spacing="15" styleClass="form-section">
+        <Tab text="Cointegration Tester" closable="false" styleClass="cointegration-testing-tab">
+            <VBox fx:id="cointegrationTestingPane" spacing="20" styleClass="cointegration-testing-pane" alignment="CENTER">
+                <VBox spacing="15" styleClass="form-section" alignment="CENTER">
                     <Label text="Cointegration Test Configuration" styleClass="section-title"/>
 
-                    <HBox spacing="10" alignment="CENTER_LEFT">
+                    <HBox spacing="10" alignment="CENTER">
                         <Label text="Coin ID #1:" styleClass="input-label"/>
                         <TextField fx:id="cointegration_coin1" promptText="e.g., bitcoin" styleClass="coin-input"/>
                     </HBox>
 
-                    <HBox spacing="10" alignment="CENTER_LEFT">
+                    <HBox spacing="10" alignment="CENTER">
                         <Label text="Coin ID #2:" styleClass="input-label"/>
                         <TextField fx:id="cointegration_coin2" promptText="e.g., ethereum" styleClass="coin-input"/>
                     </HBox>
 
-                    <HBox spacing="10" alignment="CENTER_LEFT">
+                    <HBox spacing="10" alignment="CENTER">
                         <Label text="Number of Days:" styleClass="input-label"/>
                         <Spinner fx:id="cointegration_days" promptText="e.g., 30" styleClass="days-input"/>
                     </HBox>
@@ -35,55 +34,78 @@
                 <StackPane fx:id="cointegrationGraphContainer" prefHeight="500" styleClass="graph-container"/>
             </VBox>
         </Tab>
+
         <Tab text="Pairs Trader" closable="false" styleClass="pairs-trader-tab">
-            <VBox fx:id="pairsTraderPane" spacing="20" styleClass="pairs-trader-pane" alignment="TOP_LEFT">
-                <VBox spacing="15" styleClass="form-section">
-                    <Label text="Pairs Trader Configuration" styleClass="section-title"/>
-
-                    <HBox spacing="10" alignment="CENTER_LEFT">
-                        <Label text="Coin ID #1:" styleClass="input-label"/>
-                        <TextField fx:id="pairsTrader_coin1" promptText="e.g., bitcoin" styleClass="coin-input"/>
-                    </HBox>
-
-                    <HBox spacing="10" alignment="CENTER_LEFT">
-                        <Label text="Coin ID #2:" styleClass="input-label"/>
-                        <TextField fx:id="pairsTrader_coin2" promptText="e.g., ethereum" styleClass="coin-input"/>
-                    </HBox>
-
-                    <HBox spacing="10" alignment="CENTER_LEFT">
-                        <Label text="Start Period:" styleClass="input-label"/>
-                        <ComboBox fx:id="pairsTrader_periodSelector" styleClass="period-selector">
-                            <items>
-                                <FXCollections fx:factory="observableArrayList">
-                                    <String fx:value="1 month" />
-                                    <String fx:value="3 months" />
-                                    <String fx:value="6 months" />
-                                    <String fx:value="9 months" />
-                                    <String fx:value="11 months" />
-                                </FXCollections>
-                            </items>
-                        </ComboBox>
-                    </HBox>
-
-                    <HBox spacing="10" alignment="CENTER_LEFT">
-                        <Label text="Cointegration Buffer Days:" styleClass="input-label"/>
-                        <Spinner fx:id="pairsTrader_bufferDays" styleClass="buffer-days-spinner"/>
-                    </HBox>
-
-                    <HBox spacing="10" alignment="CENTER_LEFT">
-                        <Label text="Notional:" styleClass="input-label"/>
-                        <TextField fx:id="pairsTrader_notional" promptText="e.g., 10000" styleClass="notional-input"/>
-                    </HBox>
-
-                    <HBox spacing="10" alignment="CENTER_LEFT">
-                        <Label text="Initial Investment:" styleClass="input-label"/>
-                        <TextField fx:id="pairsTrader_initialInvestment" promptText="e.g., 100000" styleClass="initialInvestment-input"/>
-                    </HBox>
-
-                    <Button text="Run Pairs Trader" fx:id="runPairsTraderButton" onAction="#handleRunPairsTrader" styleClass="run-button"/>
-                </VBox>
-
-                <Label fx:id="pairsTraderResultLabel" text="Results will be displayed here." styleClass="result-label"/>
+            <VBox fx:id="pairsTraderPane" spacing="30" styleClass="pairs-trader-pane" alignment="CENTER">
+                <!-- Use HBox to place form and results side by side -->
+                <HBox spacing="30" alignment="CENTER">
+                    <!-- Form Section -->
+                    <VBox spacing="20" styleClass="form-section" alignment="CENTER" maxWidth="500">
+                        <Label text="Pairs Trader Configuration" styleClass="section-title"/>
+                        
+                        <HBox spacing="10" alignment="CENTER">
+                            <Label text="Coin ID #1:" styleClass="input-label"/>
+                            <TextField fx:id="pairsTrader_coin1" promptText="e.g., bitcoin" styleClass="coin-input"/>
+                        </HBox>
+                        
+                        <HBox spacing="10" alignment="CENTER">
+                            <Label text="Coin ID #2:" styleClass="input-label"/>
+                            <TextField fx:id="pairsTrader_coin2" promptText="e.g., ethereum" styleClass="coin-input"/>
+                        </HBox>
+                        
+                        <HBox spacing="10" alignment="CENTER">
+                            <Label text="Backtesting Duration:" styleClass="input-label"/>
+                            <ComboBox fx:id="pairsTrader_periodSelector" styleClass="period-selector">
+                                <items>
+                                    <FXCollections fx:factory="observableArrayList">
+                                        <String fx:value="1 month" />
+                                        <String fx:value="3 months" />
+                                        <String fx:value="6 months" />
+                                        <String fx:value="9 months" />
+                                        <String fx:value="11 months" />
+                                    </FXCollections>
+                                </items>
+                            </ComboBox>
+                        </HBox>
+                        
+                        <HBox spacing="10" alignment="CENTER">
+                            <Label text="Cointegration Buffer Days:" styleClass="input-label"/>
+                            <Spinner fx:id="pairsTrader_bufferDays" styleClass="buffer-days-spinner"/>
+                        </HBox>
+                        
+                        <HBox spacing="10" alignment="CENTER">
+                            <Label text="Notional:" styleClass="input-label"/>
+                            <TextField fx:id="pairsTrader_notional" promptText="e.g., 10000" styleClass="notional-input"/>
+                        </HBox>
+                        
+                        <HBox spacing="10" alignment="CENTER">
+                            <Label text="Initial Investment:" styleClass="input-label"/>
+                            <TextField fx:id="pairsTrader_initialInvestment" promptText="e.g., 100000" styleClass="initialInvestment-input"/>
+                        </HBox>
+                        
+                        <HBox spacing="10" alignment="CENTER">
+                            <Button text="Run Pairs Trader!" fx:id="runPairsTraderButton" onAction="#handleRunPairsTrader" styleClass="run-button"/>
+                            <Label fx:id="pairsTraderStatusLabel" text="Enter desired data to begin Pairs Trading!" styleClass="status-label"/>
+                        </HBox>
+                    </VBox>
+                    
+                    <!-- Results Section - Placed to the right -->
+                    <VBox fx:id="pairsTraderResultsBox"
+                        spacing="15"
+                        alignment="CENTER"
+                        visible="false"
+                        styleClass="results-container"
+                        minWidth="300">
+                        <Label text="Pairs Trader Results:" styleClass="results-title"/>
+                        <Label fx:id="pairsTraderRevenueLabel" text="Total Revenue: N/A" styleClass="result-label"/>
+                        <Label fx:id="pairsTraderReturnLabel" text="Return (%): N/A" styleClass="result-label"/>
+                        
+                        <!-- Add some spacing to better align with the form -->
+                        <Region prefHeight="100" />
+                    </VBox>
+                </HBox>
+                
+                <!-- Graph container beneath both form and results -->
                 <StackPane fx:id="pairsTraderGraphContainer" prefHeight="500" styleClass="graph-container"/>
             </VBox>
         </Tab>
