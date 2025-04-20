@@ -42,6 +42,7 @@ public class PairsTrader {
       Trade coin1Trade;
       Trade coin2Trade;
       LocalDate tradeDate = LocalDate.now().minusDays(numDays - i);
+
       switch (signal.getSignalType()) {
         case LONG_1_SHORT_2 -> {
           if (ledger.getUnsoldTrades().isEmpty()) {

@@ -227,9 +227,9 @@ public class WebsiteFXController {
           double totalRevenue = ledger.getTotalRevenue(coin1Data.get(coin1Data.size() - 1),
               coin2Data.get(coin2Data.size() - 1));
           pairsTraderRevenueLabel.setText(
-              "Final Value of Assets: $" + String.format("%.2f",
+              "Portfolio Value: $" + String.format("%.2f",
                   totalRevenue + initialInvestment));
-          pairsTraderReturnLabel.setText("Total Return: $" + String.format("%.2f",
+          pairsTraderReturnLabel.setText("Net Return: $" + String.format("%.2f",
               totalRevenue));
           pairsTraderReturnPercentLabel.setText("Return on Notional: " + String.format("%.2f",
               totalRevenue / notional * 100) + "%");
@@ -328,7 +328,7 @@ public class WebsiteFXController {
     xAxis.setMinorTickVisible(false);
 
     NumberAxis yAxis = new NumberAxis();
-    yAxis.setLabel("Revenue ($)");
+    yAxis.setLabel("Portfolio Value ($)");
     yAxis.setAutoRanging(false);
     yAxis.setTickMarkVisible(true);
     yAxis.setMinorTickVisible(false);
