@@ -8,11 +8,11 @@ public class ShortTrade extends Trade {
     super(asset, shares, purchasePrice, purchaseDate);
   }
 
-  public double calculateRevenue() {
+  public double calculateRevenue(double currentPrice) {
     if (isSold) {
-      return (purchasePrice - sellingPrice) * shares;
+      return ((purchasePrice - sellingPrice) * shares) - tradingFee;
     } else {
-      return -(purchasePrice * shares);
+      return ((purchasePrice - currentPrice) * shares) - tradingFee;
     }
   }
 }

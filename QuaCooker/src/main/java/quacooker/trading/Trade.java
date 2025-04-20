@@ -2,10 +2,13 @@ package quacooker.trading;
 
 import java.time.LocalDate;
 
+import quacooker.algorithm.stats.Constants;
+
 public class Trade {
   protected final String asset;
   protected final double shares;
   protected final double purchasePrice;
+  protected double tradingFee;
   protected final LocalDate purchaseDate;
   protected boolean isSold;
 
@@ -19,6 +22,7 @@ public class Trade {
     this.purchasePrice = purchasePrice;
     this.purchaseDate = purchaseDate;
     this.isSold = false;
+    this.tradingFee = Constants.TRADING_FEE * shares * purchasePrice;
   }
 
   public String getAsset() {
@@ -45,16 +49,17 @@ public class Trade {
     this.sellingPrice = sellingPrice;
     this.sellingDate = sellingDate;
     if (!isSold) {
-      this.revenue = calculateValue();
       isSold = true;
+      this.tradingFee += Constants.TRADING_FEE * shares * sellingPrice;
+      this.revenue = calculateValue(sellingPrice);
     }
   }
 
-  public double calculateValue() {
+  public double calculateValue(double currentPrice) {
     if (isSold) {
-      return (sellingPrice - purchasePrice) * shares;
+      return ((sellingPrice - purchasePrice) * shares) - tradingFee;
     } else {
-      return -(purchasePrice * shares);
+      return ((currentPrice - purchasePrice) * shares) - tradingFee;
     }
   }
 
@@ -64,5 +69,9 @@ public class Trade {
 
   public LocalDate getSellingDate() {
     return sellingDate;
+  }
+
+  public double getTradingFee() {
+    return tradingFee;
   }
 }

@@ -63,15 +63,19 @@ public class WebsiteFXController {
   private Label pairsTraderRevenueLabel;
   @FXML
   private Label pairsTraderReturnLabel;
+  @FXML
+  private Label pairsTraderReturnPercentLabel;
+  @FXML
+  private Label pairsTraderTradingFeeLabel;
 
   @FXML
   public void initialize() {
-    cointegration_days.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 365, 30));
+    cointegration_days.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 365, 60));
     cointegration_days.setEditable(true);
     cointegration_coin1.setText("ethereum-classic");
     cointegration_coin2.setText("ethereum");
 
-    pairsTrader_bufferDays.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 365, 30));
+    pairsTrader_bufferDays.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 365, 60));
     pairsTrader_bufferDays.setEditable(true);
     pairsTrader_coin1.setText("ethereum-classic");
     pairsTrader_coin2.setText("ethereum");
@@ -219,9 +223,19 @@ public class WebsiteFXController {
           VBox container = new VBox(10, wrapChart(resultsChart));
           pairsTraderGraphContainer.getChildren().setAll(container);
           pairsTraderStatusLabel.setText("Pairs Trader results shown below.");
+
+          double totalRevenue = ledger.getTotalRevenue(coin1Data.get(coin1Data.size() - 1),
+              coin2Data.get(coin2Data.size() - 1));
           pairsTraderRevenueLabel.setText(
-              "Final Value of Assets: $" + String.format("%.2f", ledger.getTotalRevenue() + initialInvestment));
-          pairsTraderReturnLabel.setText("Total Return: $" + String.format("%.2f", ledger.getTotalRevenue()));
+              "Final Value of Assets: $" + String.format("%.2f",
+                  totalRevenue + initialInvestment));
+          pairsTraderReturnLabel.setText("Total Return: $" + String.format("%.2f",
+              totalRevenue));
+          pairsTraderReturnPercentLabel.setText("Return on Notional: " + String.format("%.2f",
+              totalRevenue / notional * 100) + "%");
+          pairsTraderTradingFeeLabel.setText("Trading Fee: $" + String.format("%.2f",
+              ledger.getTotalTradingFee()));
+
           pairsTraderResultsBox.setVisible(true);
         });
 

@@ -45,8 +45,15 @@ public class MeanReversionStrategy extends PairsTradingStrategy {
                 .map(val -> (val - mean) / stdDev)
                 .collect(Collectors.toCollection(ArrayList::new));
 
-        double dynamicEntry = TimeSeriesUtils.calculatePercentile(zScores, 95);
-        double dynamicExit = TimeSeriesUtils.calculatePercentile(zScores, 50);
+        // double dynamicEntry = TimeSeriesUtils.calculatePercentile(zScores, 95);
+        // double dynamicExit = TimeSeriesUtils.calculatePercentile(zScores, 50);
+
+        // FIXED ENTRY/EXIT THRESHOLDS (1 std from mean)
+        // dynamicEntry = 1.0;
+        // dynamicExit = 0.5;
+
+        double dynamicEntry = Math.max(1.0, TimeSeriesUtils.calculatePercentile(zScores, 95));
+        double dynamicExit = Math.min(0.5, TimeSeriesUtils.calculatePercentile(zScores, 50));
 
         double coin1Units = regressionResult.getCoin1Units(NOTIONAL, series1.get(series1.size() - 1));
         double coin2Units = regressionResult.getCoin2Units(NOTIONAL, series2.get(series2.size() - 1));

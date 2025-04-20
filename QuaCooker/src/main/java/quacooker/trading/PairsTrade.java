@@ -35,11 +35,15 @@ public class PairsTrade {
     }
   }
 
-  public double calculateValue() {
-    return coin1Trade.calculateValue() + coin2Trade.calculateValue();
+  public double calculateValue(double coin1Price, double coin2Price) {
+    return coin1Trade.calculateValue(coin1Price) + coin2Trade.calculateValue(coin2Price);
   }
 
   public LocalDate getSellingDate() {
     return sellingDate;
+  }
+
+  public double getTradingFee() {
+    return coin1Trade.getTradingFee() + coin2Trade.getTradingFee();
   }
 }

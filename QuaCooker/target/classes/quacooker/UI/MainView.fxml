@@ -97,8 +97,10 @@
                         styleClass="results-container"
                         minWidth="300">
                         <Label text="Pairs Trader Results:" styleClass="results-title"/>
-                        <Label fx:id="pairsTraderRevenueLabel" text="Total Revenue: N/A" styleClass="result-label"/>
-                        <Label fx:id="pairsTraderReturnLabel" text="Return (%): N/A" styleClass="result-label"/>
+                        <Label fx:id="pairsTraderRevenueLabel" styleClass="result-label"/>
+                        <Label fx:id="pairsTraderReturnLabel" styleClass="result-label"/>
+                        <Label fx:id="pairsTraderReturnPercentLabel" styleClass="result-label"/>   
+                        <Label fx:id="pairsTraderTradingFeeLabel" styleClass="result-label"/>   
                         
                         <!-- Add some spacing to better align with the form -->
                         <Region prefHeight="100" />
