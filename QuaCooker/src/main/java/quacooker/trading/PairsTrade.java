@@ -42,4 +42,8 @@ public class PairsTrade {
   public LocalDate getSellingDate() {
     return sellingDate;
   }
+
+  public double getTradingFee() {
+    return coin1Trade.getTradingFee() + coin2Trade.getTradingFee();
+  }
 }

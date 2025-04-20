@@ -31,4 +31,12 @@ public class PairsTradeLedger extends ArrayList<PairsTrade> {
       trade.sell(coin1Price, coin2Price, LocalDate.now());
     }
   }
+
+  public double getTotalTradingFee() {
+    double totalTradingFee = 0;
+    for (PairsTrade trade : this) {
+      totalTradingFee += trade.getTradingFee();
+    }
+    return totalTradingFee;
+  }
 }

@@ -10,9 +10,9 @@ public class ShortTrade extends Trade {
 
   public double calculateRevenue(double currentPrice) {
     if (isSold) {
-      return (purchasePrice - sellingPrice) * shares;
+      return ((purchasePrice - sellingPrice) * shares) - tradingFee;
     } else {
-      return (purchasePrice - currentPrice) * shares;
+      return ((purchasePrice - currentPrice) * shares) - tradingFee;
     }
   }
 }
