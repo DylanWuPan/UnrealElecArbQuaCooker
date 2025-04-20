@@ -66,12 +66,12 @@ public class WebsiteFXController {
 
   @FXML
   public void initialize() {
-    cointegration_days.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 365, 30));
+    cointegration_days.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 365, 60));
     cointegration_days.setEditable(true);
     cointegration_coin1.setText("ethereum-classic");
     cointegration_coin2.setText("ethereum");
 
-    pairsTrader_bufferDays.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 365, 30));
+    pairsTrader_bufferDays.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 365, 60));
     pairsTrader_bufferDays.setEditable(true);
     pairsTrader_coin1.setText("ethereum-classic");
     pairsTrader_coin2.setText("ethereum");
@@ -220,8 +220,12 @@ public class WebsiteFXController {
           pairsTraderGraphContainer.getChildren().setAll(container);
           pairsTraderStatusLabel.setText("Pairs Trader results shown below.");
           pairsTraderRevenueLabel.setText(
-              "Final Value of Assets: $" + String.format("%.2f", ledger.getTotalRevenue() + initialInvestment));
-          pairsTraderReturnLabel.setText("Total Return: $" + String.format("%.2f", ledger.getTotalRevenue()));
+              "Final Value of Assets: $" + String.format("%.2f",
+                  ledger.getTotalRevenue(coin1Data.get(coin1Data.size() - 1),
+                      coin2Data.get(coin2Data.size() - 1)) + initialInvestment));
+          pairsTraderReturnLabel.setText("Total Return: $" + String.format("%.2f",
+              ledger.getTotalRevenue(coin1Data.get(coin1Data.size() - 1),
+                  coin2Data.get(coin2Data.size() - 1))));
           pairsTraderResultsBox.setVisible(true);
         });
 

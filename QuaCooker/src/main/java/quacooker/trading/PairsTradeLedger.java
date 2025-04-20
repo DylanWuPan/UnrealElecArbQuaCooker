@@ -8,10 +8,10 @@ public class PairsTradeLedger extends ArrayList<PairsTrade> {
     super();
   }
 
-  public double getTotalRevenue() {
+  public double getTotalRevenue(double coin1Price, double coin2Price) {
     double totalRevenue = 0;
     for (PairsTrade trade : this) {
-      totalRevenue += trade.calculateValue();
+      totalRevenue += trade.calculateValue(coin1Price, coin2Price);
     }
     return totalRevenue;
   }

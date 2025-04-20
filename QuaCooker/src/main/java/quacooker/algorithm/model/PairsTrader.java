@@ -44,16 +44,20 @@ public class PairsTrader {
       LocalDate tradeDate = LocalDate.now().minusDays(numDays - i);
       switch (signal.getSignalType()) {
         case LONG_1_SHORT_2 -> {
-          coin1Trade = new Trade(coin1, Math.abs(signal.getCoin1Units()), series1.get(series1.size() - 1), tradeDate);
-          coin2Trade = new ShortTrade(coin2, Math.abs(signal.getCoin2Units()), series2.get(series2.size() - 1),
-              tradeDate);
-          ledger.add(new PairsTrade(coin1Trade, coin2Trade));
+          if (ledger.getUnsoldTrades().isEmpty()) {
+            coin1Trade = new Trade(coin1, Math.abs(signal.getCoin1Units()), series1.get(series1.size() - 1), tradeDate);
+            coin2Trade = new ShortTrade(coin2, Math.abs(signal.getCoin2Units()), series2.get(series2.size() - 1),
+                tradeDate);
+            ledger.add(new PairsTrade(coin1Trade, coin2Trade));
+          }
         }
         case SHORT_1_LONG_2 -> {
-          coin1Trade = new ShortTrade(coin1, Math.abs(signal.getCoin1Units()), series1.get(series1.size() - 1),
-              tradeDate);
-          coin2Trade = new Trade(coin2, Math.abs(signal.getCoin2Units()), series2.get(series2.size() - 1), tradeDate);
-          ledger.add(new PairsTrade(coin1Trade, coin2Trade));
+          if (ledger.getUnsoldTrades().isEmpty()) {
+            coin1Trade = new ShortTrade(coin1, Math.abs(signal.getCoin1Units()), series1.get(series1.size() - 1),
+                tradeDate);
+            coin2Trade = new Trade(coin2, Math.abs(signal.getCoin2Units()), series2.get(series2.size() - 1), tradeDate);
+            ledger.add(new PairsTrade(coin1Trade, coin2Trade));
+          }
         }
         case SELL -> {
           ledger.sellUnsoldTrades(series1.get(series1.size() - 1), series2.get(series2.size() - 1));
@@ -61,11 +65,14 @@ public class PairsTrader {
         default -> {
         }
       }
-      revenueTracker.add(initialInvestment + ledger.getTotalRevenue());
+      revenueTracker.add(initialInvestment + ledger.getTotalRevenue(series1.get(series1.size() - 1),
+          series2.get(series2.size() - 1)));
     }
     ledger.sellUnsoldTrades(coin1Data.getPrices().get(coin1Data.getPrices().size() - 1),
         coin2Data.getPrices().get(coin2Data.getPrices().size() - 1));
-    revenueTracker.add(initialInvestment + ledger.getTotalRevenue());
+    revenueTracker.add(initialInvestment + ledger.getTotalRevenue(
+        coin1Data.getPrices().get(coin1Data.getPrices().size() - 1),
+        coin2Data.getPrices().get(coin2Data.getPrices().size() - 1)));
     return revenueTracker;
   }
 

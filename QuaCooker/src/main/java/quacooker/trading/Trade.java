@@ -45,16 +45,16 @@ public class Trade {
     this.sellingPrice = sellingPrice;
     this.sellingDate = sellingDate;
     if (!isSold) {
-      this.revenue = calculateValue();
       isSold = true;
+      this.revenue = calculateValue(sellingPrice);
     }
   }
 
-  public double calculateValue() {
+  public double calculateValue(double currentPrice) {
     if (isSold) {
       return (sellingPrice - purchasePrice) * shares;
     } else {
-      return -(purchasePrice * shares);
+      return (currentPrice - purchasePrice) * shares;
     }
   }
 
