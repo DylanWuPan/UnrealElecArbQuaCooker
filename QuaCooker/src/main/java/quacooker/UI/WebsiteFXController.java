@@ -70,15 +70,15 @@ public class WebsiteFXController {
 
   @FXML
   public void initialize() {
-    cointegration_days.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 365, 60));
+    cointegration_days.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 365, 100));
     cointegration_days.setEditable(true);
-    cointegration_coin1.setText("ethereum-classic");
-    cointegration_coin2.setText("ethereum");
+    cointegration_coin1.setText("bitcoin");
+    cointegration_coin2.setText("wrapped-bitcoin");
 
     pairsTrader_bufferDays.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 365, 60));
     pairsTrader_bufferDays.setEditable(true);
-    pairsTrader_coin1.setText("ethereum-classic");
-    pairsTrader_coin2.setText("ethereum");
+    pairsTrader_coin1.setText("bitcoin");
+    pairsTrader_coin2.setText("wrapped-bitcoin");
     pairsTrader_periodSelector.setValue("9 months");
     pairsTrader_periodSelector.setEditable(false);
     pairsTrader_notional.setText("10000");
@@ -97,7 +97,6 @@ public class WebsiteFXController {
       LineChart<Number, Number> coin1Chart = TickerDataGrapher.graphPrices(coin1Data, "red");
       LineChart<Number, Number> coin2Chart = TickerDataGrapher.graphPrices(coin2Data, "blue");
 
-      // Make price charts slightly narrower since they'll be side-by-side
       coin1Chart.setPrefWidth(365);
       coin2Chart.setPrefWidth(365);
 
@@ -109,7 +108,6 @@ public class WebsiteFXController {
           : null;
 
       Platform.runLater(() -> {
-        // Create horizontal layout for price charts
         HBox priceChartsContainer = new HBox(10);
         priceChartsContainer.setAlignment(Pos.CENTER);
         priceChartsContainer.getChildren().addAll(
@@ -120,7 +118,6 @@ public class WebsiteFXController {
         graphContainer.getChildren().add(priceChartsContainer);
 
         if (cointegrated && spread != null) {
-          // Give spread chart more room
           LineChart<Number, Number> spreadChart = createSpreadChart(spread);
           spreadChart.setPrefWidth(750);
           graphContainer.getChildren().add(wrapChart(spreadChart));
@@ -144,7 +141,6 @@ public class WebsiteFXController {
 
   @FXML
   public void handleRunPairsTrader(ActionEvent event) {
-    // --- input validation ---
     String coin1 = pairsTrader_coin1.getText().trim();
     String coin2 = pairsTrader_coin2.getText().trim();
     String period = pairsTrader_periodSelector.getValue();
@@ -190,12 +186,10 @@ public class WebsiteFXController {
 
     int totalDays = numDays + bufferDays;
 
-    // --- immediately update the UI ---
     pairsTraderResultsBox.setVisible(false);
     pairsTraderGraphContainer.getChildren().clear();
     pairsTraderStatusLabel.setText("Pairs Trading in progress...");
 
-    // --- run background task ---
     Task<Void> task = new Task<>() {
       @Override
       protected Void call() throws Exception {
@@ -265,7 +259,6 @@ public class WebsiteFXController {
     yAxis.setTickMarkVisible(true);
     yAxis.setMinorTickVisible(false);
 
-    // Calculate bounds with consistent padding approach
     double min = spread.stream().min(Double::compare).orElse(0.0);
     double max = spread.stream().max(Double::compare).orElse(0.0);
     double range = max - min;
@@ -276,7 +269,6 @@ public class WebsiteFXController {
     double lowerBound = min - padding;
     double upperBound = max + padding;
 
-    // Calculate nice tick units
     double rawTickUnit = range / 10;
     double exponent = Math.floor(Math.log10(rawTickUnit));
     double magnitude = Math.pow(10, exponent);
@@ -294,7 +286,6 @@ public class WebsiteFXController {
     chart.setHorizontalGridLinesVisible(true);
     chart.setVerticalGridLinesVisible(false);
 
-    // Style chart background and grid
     chart.setStyle("""
             -fx-background-color: #1a1a1a;
             -fx-border-color: #333333;
@@ -309,7 +300,6 @@ public class WebsiteFXController {
     }
     chart.getData().add(series);
 
-    // Apply a different color to distinguish from revenue chart
     series.nodeProperty().addListener((obs, oldNode, newNode) -> {
       if (newNode != null) {
         newNode.setStyle("-fx-stroke: #4287f5; -fx-stroke-width: 2px;");
@@ -360,7 +350,6 @@ public class WebsiteFXController {
     chart.setHorizontalGridLinesVisible(true);
     chart.setVerticalGridLinesVisible(true);
 
-    // Style chart background and grid
     chart.setStyle("""
             -fx-background-color: #1a1a1a;
             -fx-border-color: #333333;
@@ -376,7 +365,6 @@ public class WebsiteFXController {
 
     chart.getData().add(series);
 
-    // Apply stroke color to series
     series.nodeProperty().addListener((obs, oldNode, newNode) -> {
       if (newNode != null) {
         newNode.setStyle("-fx-stroke: " + color + "; -fx-stroke-width: 2px;");

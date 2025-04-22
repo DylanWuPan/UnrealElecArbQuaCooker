@@ -1,12 +1,9 @@
 package quacooker.algorithm.stats;
 
-/**
- * Stores alpha, beta, and standard error of beta from regression.
- */
 public class RegressionResult {
     private final double alpha;
     private final double beta;
-    private final double seBeta; // Standard error of beta
+    private final double seBeta;
 
     public RegressionResult(double alpha, double beta, double seBeta) {
         this.alpha = alpha;

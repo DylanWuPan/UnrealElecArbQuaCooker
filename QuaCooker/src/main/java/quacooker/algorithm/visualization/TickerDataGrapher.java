@@ -41,7 +41,6 @@ public class TickerDataGrapher {
   }
 
   public static LineChart<Number, Number> graphPrices(TickerData tickerData, String color) {
-    // Create x-axis but hide it
     NumberAxis xAxis = new NumberAxis();
     xAxis.setTickLabelsVisible(false);
     xAxis.setTickMarkVisible(false);
@@ -51,7 +50,6 @@ public class TickerDataGrapher {
     xAxis.setForceZeroInRange(false);
     xAxis.setVisible(false);
 
-    // Configure y-axis
     NumberAxis yAxis = new NumberAxis();
     yAxis.setLabel("Price ($)");
     yAxis.setAutoRanging(true);
@@ -79,7 +77,6 @@ public class TickerDataGrapher {
     chart.setAnimated(false);
     chart.setVerticalGridLinesVisible(false);
 
-    // Hide x-axis area
     chart.setPadding(new Insets(10, 10, 0, 10));
 
     return chart;

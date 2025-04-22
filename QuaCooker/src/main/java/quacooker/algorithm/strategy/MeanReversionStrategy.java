@@ -7,10 +7,6 @@ import quacooker.algorithm.stats.OLSUtils;
 import quacooker.algorithm.stats.RegressionResult;
 import quacooker.algorithm.stats.TimeSeriesUtils;
 
-/**
- * A concrete implementation of PairsTradingStrategy using z-score with proper
- * hedge ratios.
- */
 public class MeanReversionStrategy extends PairsTradingStrategy {
 
     public MeanReversionStrategy(double notional) {

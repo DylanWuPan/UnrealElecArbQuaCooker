@@ -3,19 +3,8 @@ package quacooker.algorithm.stats;
 import java.util.ArrayList;
 import java.util.Collections;
 
-/**
- * Contains utility methods including moving average, z-score, spread
- * calculation, correlation, covariance,
- * rolling window calculations.
- */
 public class TimeSeriesUtils {
 
-    /**
-     * Converts a list of prices to multiplicative (log) returns.
-     * 
-     * @param prices
-     * @return
-     */
     public static ArrayList<Double> pricesToMultiplicativeReturns(ArrayList<Double> prices) {
         if (prices.size() < 2) {
             throw new IllegalArgumentException("Need at least two prices to compute returns.");
@@ -27,10 +16,8 @@ public class TimeSeriesUtils {
             double previousPrice = prices.get(i - 1);
             double currentPrice = prices.get(i);
 
-            // Calculate the percentage return (multiplicative)
             double returnValue = Math.log(currentPrice / previousPrice);
 
-            // Add the return to the list
             multiplicativeReturns.add(returnValue);
         }
         return multiplicativeReturns;
@@ -88,7 +75,7 @@ public class TimeSeriesUtils {
         double denominator = Math.sqrt((n * sumX2 - sumX * sumX) * (n * sumY2 - sumY * sumY));
 
         if (denominator == 0) {
-            return 0; // or throw an exception if undefined
+            return 0;
         }
 
         return numerator / denominator;
@@ -99,8 +86,6 @@ public class TimeSeriesUtils {
 
         return ZScores;
     }
-
-    // --- Moving Averages ---
 
     public static double[] calculateEMA(double[] data, int period) {
         double[] EMA = { 0, 1 };

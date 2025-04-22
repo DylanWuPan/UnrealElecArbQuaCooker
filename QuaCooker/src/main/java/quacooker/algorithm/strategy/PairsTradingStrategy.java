@@ -2,9 +2,6 @@ package quacooker.algorithm.strategy;
 
 import java.util.ArrayList;
 
-/**
- * Defines the strategy interface -- all strategies should implement this.
- */
 public abstract class PairsTradingStrategy {
     double NOTIONAL;
 
