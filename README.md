@@ -44,4 +44,5 @@ If none of that made any sense, watch this video: https://www.youtube.com/watch?
 ```bash
 git clone https://github.com/yourusername/quacooker.git
 cd quacooker
+mvn javafx:run
 ```
