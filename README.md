@@ -28,7 +28,8 @@ If none of that made any sense, watch this video: https://www.youtube.com/watch?
 - Java 17+
 - JavaFX
 - Maven
-- Coinbase API (for historical crypto data)
+- Coinbase API (for live crypto ticker data)
+- Coingecko API (for historical crypto data)
 
 ## Getting Started
 
