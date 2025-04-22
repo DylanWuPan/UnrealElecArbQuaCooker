@@ -2,8 +2,9 @@
 
 Thomson, Baumal-Bardy, Pan
 
-**QuaCooker** is a Java-based cryptocurrency pairs trading platform that uses statistical arbitrage techniques. The application supports historical backtesting using mean reversion strategies and cointegration tests, with a modern JavaFX GUI for visualization.
---> https://www.youtube.com/watch?v=YDMSqal-RZ4
+**UnrealElecArbQuaCooker** is a Java-based cryptocurrency pairs trading platform that uses statistical arbitrage techniques. The application supports historical backtesting using mean reversion strategies and cointegration tests, with a modern JavaFX GUI for visualization.
+
+If none of that made any sense, watch this video: https://www.youtube.com/watch?v=YDMSqal-RZ4!
 
 ## Features
 
