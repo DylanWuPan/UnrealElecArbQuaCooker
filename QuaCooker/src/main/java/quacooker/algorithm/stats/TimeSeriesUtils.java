@@ -3,8 +3,22 @@ package quacooker.algorithm.stats;
 import java.util.ArrayList;
 import java.util.Collections;
 
+/**
+ * Provides utility functions for time series analysis, including calculations
+ * for returns,
+ * mean, standard deviation, correlation, percentiles, and more.
+ */
 public class TimeSeriesUtils {
 
+    /**
+     * Converts a list of prices into multiplicative returns using the natural
+     * logarithm of the price ratio.
+     *
+     * @param prices A list of prices in chronological order.
+     * @return A list of multiplicative returns.
+     * @throws IllegalArgumentException if the list of prices contains fewer than
+     *                                  two values.
+     */
     public static ArrayList<Double> pricesToMultiplicativeReturns(ArrayList<Double> prices) {
         if (prices.size() < 2) {
             throw new IllegalArgumentException("Need at least two prices to compute returns.");
@@ -23,6 +37,12 @@ public class TimeSeriesUtils {
         return multiplicativeReturns;
     }
 
+    /**
+     * Calculates the mean of a given data set.
+     *
+     * @param data An array of numerical data.
+     * @return The mean (average) of the data.
+     */
     public static double calculateMean(double[] data) {
         double mean = 0;
         double temporarySum = 0;
@@ -35,6 +55,12 @@ public class TimeSeriesUtils {
         return mean;
     }
 
+    /**
+     * Calculates the standard deviation of a given data set.
+     *
+     * @param data An array of numerical data.
+     * @return The standard deviation of the data.
+     */
     public static double calculateStandardDeviation(double[] data) {
         double sd = 0;
         double sum = 0;
@@ -54,6 +80,15 @@ public class TimeSeriesUtils {
         return sd;
     }
 
+    /**
+     * Calculates the correlation coefficient between two time series.
+     *
+     * @param series1 The first time series.
+     * @param series2 The second time series.
+     * @return The correlation coefficient between the two series.
+     * @throws IllegalArgumentException if the series are of different lengths or
+     *                                  empty.
+     */
     public static double calculateCorrelation(double[] series1, double[] series2) {
         if (series1.length != series2.length || series1.length == 0) {
             throw new IllegalArgumentException("Arrays must be of the same non-zero length");
@@ -81,24 +116,54 @@ public class TimeSeriesUtils {
         return numerator / denominator;
     }
 
+    /**
+     * Calculates the Z-scores of a given data set. (Placeholder method for future
+     * implementation.)
+     *
+     * @param data An array of numerical data.
+     * @return An array of Z-scores for the data.
+     */
     public static double[] calculateZScores(double[] data) {
         double[] ZScores = { 0, 1 };
 
         return ZScores;
     }
 
+    /**
+     * Calculates the Exponential Moving Average (EMA) of a given data set.
+     * (Placeholder method for future implementation.)
+     *
+     * @param data   An array of numerical data.
+     * @param period The period for calculating the EMA.
+     * @return An array representing the EMA of the data.
+     */
     public static double[] calculateEMA(double[] data, int period) {
         double[] EMA = { 0, 1 };
 
         return EMA;
     }
 
+    /**
+     * Calculates the Simple Moving Average (SMA) of a given data set.
+     * (Placeholder method for future implementation.)
+     *
+     * @param data   An array of numerical data.
+     * @param period The period for calculating the SMA.
+     * @return An array representing the SMA of the data.
+     */
     public static double[] calculateSMA(double[] data, int period) {
         double[] SMA = { 0, 1 };
 
         return SMA;
     }
 
+    /**
+     * Calculates the percentile of a list of values.
+     *
+     * @param values     A list of numerical values.
+     * @param percentile The percentile to calculate (between 0 and 100).
+     * @return The value at the specified percentile.
+     */
     public static double calculatePercentile(ArrayList<Double> values, double percentile) {
         ArrayList<Double> sorted = new ArrayList<>(values);
         Collections.sort(sorted);

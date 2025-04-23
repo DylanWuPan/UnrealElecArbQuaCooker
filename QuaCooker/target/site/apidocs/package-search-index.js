@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"quacooker"},{"l":"quacooker.algorithm.model"},{"l":"quacooker.algorithm.stats"},{"l":"quacooker.algorithm.strategy"},{"l":"quacooker.algorithm.visualization"},{"l":"quacooker.api"},{"l":"quacooker.trading"},{"l":"quacooker.UI"}];updateSearchResults();

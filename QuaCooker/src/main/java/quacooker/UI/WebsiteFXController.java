@@ -28,8 +28,35 @@ import quacooker.api.HistoricalDataFetcher;
 import quacooker.api.TickerData;
 import quacooker.trading.PairsTradeLedger;
 
+/**
+ * The {@code WebsiteFXController} class is the controller for the JavaFX-based
+ * user interface
+ * of the QuaCooker application. It handles interactions with the user interface
+ * elements related to
+ * pairs trading, cointegration testing, and the visualization of results.
+ * <p>
+ * This class manages various UI components, such as text fields, spinners,
+ * labels, and charts. It is
+ * responsible for fetching historical data, running statistical tests (like
+ * cointegration and pairs
+ * trading), and displaying the results in the UI.
+ * </p>
+ * 
+ * <p>
+ * The controller manages two primary functionalities: cointegration testing and
+ * pairs trading.
+ * The cointegration test checks whether two time series are cointegrated, while
+ * the pairs trading
+ * strategy allows users to simulate trading based on cointegration and a mean
+ * reversion strategy.
+ * </p>
+ * 
+ * @author QuaCookers
+ * @version 1.0
+ */
 public class WebsiteFXController {
 
+  // FXML UI elements
   @FXML
   private TextField cointegration_coin1;
   @FXML
@@ -68,6 +95,11 @@ public class WebsiteFXController {
   @FXML
   private Label pairsTraderTradingFeeLabel;
 
+  /**
+   * Initializes the controller by setting default values for various UI elements,
+   * such as text fields,
+   * spinners, and combo boxes.
+   */
   @FXML
   public void initialize() {
     cointegration_days.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 365, 100));
@@ -85,6 +117,13 @@ public class WebsiteFXController {
     pairsTrader_initialInvestment.setText("1000000");
   }
 
+  /**
+   * Handles the click event for the "Run Cointegration Test" button.
+   * It fetches historical data for two coins, runs a cointegration test, and
+   * displays the results.
+   * 
+   * @param event the action event triggered by the button click
+   */
   public void handleRunCointegrationTest(ActionEvent event) {
     String coin1 = cointegration_coin1.getText().trim();
     String coin2 = cointegration_coin2.getText().trim();
@@ -139,6 +178,15 @@ public class WebsiteFXController {
     }
   }
 
+  /**
+   * Handles the click event for the "Run Pairs Trader" button.
+   * It fetches historical data for two coins, backtests the pairs trading
+   * strategy,
+   * and displays the results (including portfolio value, return, and trading
+   * fee).
+   * 
+   * @param event the action event triggered by the button click
+   */
   @FXML
   public void handleRunPairsTrader(ActionEvent event) {
     String coin1 = pairsTrader_coin1.getText().trim();
@@ -245,6 +293,13 @@ public class WebsiteFXController {
     new Thread(task).start();
   }
 
+  /**
+   * Creates a chart for displaying the spread between two cointegrated time
+   * series.
+   * 
+   * @param spread the list of spread values between the two time series
+   * @return a LineChart representing the spread analysis
+   */
   private static LineChart<Number, Number> createSpreadChart(ArrayList<Double> spread) {
     NumberAxis xAxis = new NumberAxis();
     xAxis.setAutoRanging(true);
@@ -310,6 +365,13 @@ public class WebsiteFXController {
     return chart;
   }
 
+  /**
+   * Creates a chart for displaying the results of a pairs trading strategy.
+   * 
+   * @param results the list of portfolio values over time
+   * @param color   the color used to display the chart
+   * @return a LineChart representing the pairs trading results
+   */
   public static LineChart<Number, Number> graphResults(ArrayList<Double> results, String color) {
     NumberAxis xAxis = new NumberAxis();
     xAxis.setLabel("Time (days)");
@@ -374,6 +436,12 @@ public class WebsiteFXController {
     return chart;
   }
 
+  /**
+   * Wraps a LineChart in a StackPane to apply styling and sizing.
+   * 
+   * @param chart the LineChart to wrap
+   * @return a StackPane containing the chart
+   */
   private StackPane wrapChart(LineChart<Number, Number> chart) {
     StackPane wrapper = new StackPane(chart);
     wrapper.setPrefSize(750, 500);

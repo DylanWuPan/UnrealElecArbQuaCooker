@@ -9,8 +9,21 @@ import javafx.scene.chart.XYChart;
 import quacooker.algorithm.stats.TimeSeriesUtils;
 import quacooker.api.TickerData;
 
+/**
+ * Utility class for graphing time series data, specifically the price and
+ * return data
+ * from a list of {@link TickerData} objects, using JavaFX LineChart.
+ */
 public class TickerDataGrapher {
 
+  /**
+   * Creates a line chart that plots the returns of a list of ticker data.
+   * The returns are calculated as the multiplicative returns of the price series.
+   *
+   * @param tickerDataList A list of {@link TickerData} objects, each containing
+   *                       price data.
+   * @return A {@link LineChart} showing the returns of the ticker data.
+   */
   public static LineChart<Number, Number> graphReturns(ArrayList<TickerData> tickerDataList) {
     NumberAxis xAxis = new NumberAxis();
     NumberAxis yAxis = new NumberAxis();
@@ -24,6 +37,7 @@ public class TickerDataGrapher {
 
     LineChart<Number, Number> chart = new LineChart<>(xAxis, yAxis);
 
+    // Iterate through each ticker data and plot its returns
     for (TickerData tickerData : tickerDataList) {
       XYChart.Series<Number, Number> series = new XYChart.Series<>();
       series.setName(tickerData.get(0).getProductId());
@@ -40,6 +54,15 @@ public class TickerDataGrapher {
     return chart;
   }
 
+  /**
+   * Creates a line chart that plots the price of a specific ticker data.
+   *
+   * @param tickerData A single {@link TickerData} object containing the price
+   *                   data.
+   * @param color      A string representing the color of the line in the chart
+   *                   (e.g., "red", "blue").
+   * @return A {@link LineChart} showing the price data of the specified ticker.
+   */
   public static LineChart<Number, Number> graphPrices(TickerData tickerData, String color) {
     NumberAxis xAxis = new NumberAxis();
     xAxis.setTickLabelsVisible(false);
@@ -48,7 +71,6 @@ public class TickerDataGrapher {
     xAxis.setVisible(false);
     xAxis.setAutoRanging(true);
     xAxis.setForceZeroInRange(false);
-    xAxis.setVisible(false);
 
     NumberAxis yAxis = new NumberAxis();
     yAxis.setLabel("Price ($)");
@@ -57,6 +79,7 @@ public class TickerDataGrapher {
 
     LineChart<Number, Number> chart = new LineChart<>(xAxis, yAxis);
 
+    // Set chart title and create series
     String coinId = tickerData.get(0).getProductId();
     chart.setTitle("Price Chart: " + coinId);
 
@@ -70,8 +93,10 @@ public class TickerDataGrapher {
 
     chart.getData().add(series);
 
+    // Set line color for the series
     series.getNode().setStyle("-fx-stroke: " + color + ";");
 
+    // Configure chart appearance
     chart.setLegendVisible(false);
     chart.setCreateSymbols(false);
     chart.setAnimated(false);
