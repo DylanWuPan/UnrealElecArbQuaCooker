@@ -28,7 +28,8 @@ If none of that made any sense, watch this video: https://www.youtube.com/watch?
 - Java 17+
 - JavaFX
 - Maven
-- Coinbase API (for historical crypto data)
+- Coinbase API (for live crypto ticker data)
+- Coingecko API (for historical crypto data)
 
 ## Getting Started
 
@@ -43,4 +44,5 @@ If none of that made any sense, watch this video: https://www.youtube.com/watch?
 ```bash
 git clone https://github.com/yourusername/quacooker.git
 cd quacooker
+mvn javafx:run
 ```
